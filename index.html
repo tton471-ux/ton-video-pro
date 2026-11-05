@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="th"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V3.2</title>
+<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V3.2.1</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:16px/1.55 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:18px 14px 48px}
 .card{background:#142239;border:1px solid #30435e;border-radius:17px;padding:17px;margin:14px 0}
@@ -10,12 +10,12 @@ h1{font-size:25px;margin:0}h2{font-size:19px;margin:0 0 10px}.muted{color:#9fb0c
 button,select{width:100%;padding:13px;border-radius:10px;border:1px solid #405674;background:#0b1728;color:#fff;font:inherit;margin-top:7px}button{background:#60a5fa;color:#071426;font-weight:800;border:0}button:disabled{opacity:.45}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.good,.warn,.bad{padding:12px;border-radius:10px;margin-top:10px;font-size:14px}.good{background:#12372f;color:#b7f7dd}.warn{background:#3b2c18;color:#ffe0a3}.bad{background:#421f29;color:#ffd1d9}
 table{width:100%;border-collapse:collapse;font-size:14px}td{padding:8px 2px;border-bottom:1px solid #30435e;overflow-wrap:anywhere}td:last-child{text-align:right;color:#dbeafe}
-.status{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:10px;font-size:14px}.bar{height:9px;background:#26364d;border-radius:20px;overflow:hidden;margin-top:10px}.bar i{display:block;width:0;height:100%;background:#34d399}
+.status{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:10px;font-size:14px}.process-status{display:block;min-height:42px;padding:12px;border-radius:10px;background:#0b1728;border:1px solid #405674;color:#dbeafe;margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}.bar{height:9px;background:#26364d;border-radius:20px;overflow:hidden;margin-top:10px}.bar i{display:block;width:0;height:100%;background:#34d399}
 a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;color:#9fb0c7}
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
 </style></head><body><main>
 <h1>🎬 TON VIDEO PRO</h1>
-<p class="muted">V3.2 · HDR Capability Check · HDR Safe · 60 / 120 FPS · Local processing</p>
+<p class="muted">V3.2.1 · HDR Capability Check · HDR Safe · 60 / 120 FPS · Local processing</p>
 
 <section class="card"><h2>1. เลือกวิดีโอ</h2>
 <label class="drop">⬆️<br><b>แตะเพื่อเลือกไฟล์วิดีโอ</b><br><span class="muted">MP4 / MOV / WebM · ประมวลผลบนอุปกรณ์</span><input id="file" type="file" accept="video/*"></label>
@@ -39,13 +39,13 @@ a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;
 <div class="warn">HDR Safe จะส่งออกไฟล์ต้นฉบับเดิมเมื่อพบ HDR หรืออ่านข้อมูลไม่ครบ จึงไม่ลดขนาดไฟล์และไม่เปลี่ยน FPS ส่วน SDR Optimizer ใช้ H.264 8-bit เท่านั้น ห้ามใช้กับ HDR</div>
 <div class="warn">HDR Experimental เป็นการทดสอบเข้ารหัสใหม่ ไม่รับประกันการคง mastering-display / MaxCLL / Dolby Vision dynamic metadata ทุกชนิด ให้เก็บต้นฉบับไว้เสมอ และตรวจสอบไฟล์ผลลัพธ์ก่อนใช้งานจริง</div>
 <div class="good">HDR Experimental จะทำงานเฉพาะเมื่อพบ HDR + 10-bit + BT.2020 + PQ/HLG และมี libx265 ให้เลือก หากเงื่อนไขไม่ครบ ระบบจะหยุดเพื่อความปลอดภัย</div>
-<button id="process" disabled>เริ่มประมวลผล</button><div id="processStatus" class="status"></div>
+<button id="process" disabled>เริ่มประมวลผล</button><div id="processStatus" class="process-status" role="status" aria-live="polite">เลือกไฟล์และวิเคราะห์ก่อนเริ่มประมวลผล</div>
 </section>
 
 <section id="result" class="card hidden"><h2>4. ผลลัพธ์</h2><div id="report"></div><a id="download"><button>ดาวน์โหลดไฟล์</button></a></section>
 
 <section class="card"><h2>ข้อจำกัดที่ต้องทราบ</h2>
-<p class="small">V3.2 ตรวจสอบการมีอยู่ของ libx265 ก่อน แต่การพบ encoder เพียงอย่างเดียวยังไม่รับประกันการรักษา HDR10/HLG หรือ dynamic metadata จึงยังไม่เปิด HDR re-encode จนกว่าจะมีการทดสอบ end-to-end กับไฟล์ตัวอย่าง การรักษา HDR Safe คือคัดลอกไฟล์เดิมโดยไม่เข้ารหัสซ้ำ การแปลง 60 เป็น 120 FPS ไม่ใช่ AI Frame Interpolation และ TikTok ยังสามารถเข้ารหัสไฟล์ใหม่ได้</p>
+<p class="small">V3.2.1 ตรวจสอบการมีอยู่ของ libx265 ก่อน แต่การพบ encoder เพียงอย่างเดียวยังไม่รับประกันการรักษา HDR10/HLG หรือ dynamic metadata จึงยังไม่เปิด HDR re-encode จนกว่าจะมีการทดสอบ end-to-end กับไฟล์ตัวอย่าง การรักษา HDR Safe คือคัดลอกไฟล์เดิมโดยไม่เข้ารหัสซ้ำ การแปลง 60 เป็น 120 FPS ไม่ใช่ AI Frame Interpolation และ TikTok ยังสามารถเข้ารหัสไฟล์ใหม่ได้</p>
 <p class="small">ใช้ผ่าน HTTPS และ Chrome/Edge รุ่นใหม่ การวิเคราะห์ต้องโหลด FFmpeg.wasm จาก CDN ในครั้งแรก หากเครือข่ายบล็อก CDN จะแสดงขั้นตอนที่ล้มเหลว</p>
 </section>
 </main>
@@ -56,6 +56,7 @@ const fmt=n=>{if(!Number.isFinite(n))return 'ไม่ทราบ';let u=['B','
 const say=t=>$('status').textContent=t;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function setProgress(v){$('prog').style.width=Math.max(0,Math.min(100,v))+'%'}
+$('mode').onchange=()=>{if($('mode').value==='hdrtest'){$('fps').value='keep';$('res').value='keep';$('processStatus').textContent='HDR Experimental: ตั้ง FPS และความละเอียดเป็นคงต้นฉบับอัตโนมัติ'}else $('processStatus').textContent='โหมดเปลี่ยนแล้ว พร้อมตั้งค่าประมวลผล'};
 $('file').onchange=e=>{file=e.target.files?.[0]||null;analysis=null;$('fileInfo').textContent=file?`${file.name} · ${fmt(file.size)} · ${file.type||'video'}`:'ยังไม่ได้เลือกไฟล์';$('analyze').disabled=!file;$('process').disabled=!file;$('analysis').classList.add('hidden');$('result').classList.add('hidden');say(file?'พร้อมวิเคราะห์ไฟล์':'เลือกไฟล์เพื่อเริ่มต้น')};
 
 async function loadFFmpeg(){
@@ -69,7 +70,7 @@ async function loadFFmpeg(){
  const {FFmpeg}=mod;const {toBlobURL}=utils;
  ffmpeg=new FFmpeg();
  ffmpeg.on('log',({message})=>{if(message)window.__tonProbeLogs=(window.__tonProbeLogs||[]).concat(message).slice(-500)});
- ffmpeg.on('progress',({progress})=>{setProgress(15+Math.round(Math.max(0,Math.min(1,progress))*80))});
+ ffmpeg.on('progress',({progress})=>{const p=Math.round(Math.max(0,Math.min(1,progress))*100);setProgress(15+Math.round(p*.8));if(busy&&$('mode').value==='hdrtest')$('processStatus').textContent='กำลังเข้ารหัส HEVC 10-bit HDR… '+p+'% (อย่าปิดหน้าเว็บ)'});
  const core='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';
  say('ขั้นตอน 2/4: กำลังดาวน์โหลด FFmpeg Core และ WASM…');
  let coreURL,wasmURL;
@@ -118,7 +119,7 @@ $('analyze').onclick=async()=>{
  finally{busy=false;$('analyze').disabled=!file;$('process').disabled=!file}
 };
 $('process').onclick=async()=>{
- if(!file||busy)return;busy=true;$('process').disabled=true;$('analyze').disabled=true;$('result').classList.add('hidden');
+ if(!file||busy)return;busy=true;$('process').disabled=true;$('analyze').disabled=true;$('result').classList.add('hidden');$('processStatus').textContent='กำลังเตรียมประมวลผล…';setProgress(0);
  try{
   const mode=$('mode').value;
   const safe=mode==='safe'&&(!analysis||analysis.hdr||analysis.uncertain);
@@ -126,14 +127,15 @@ $('process').onclick=async()=>{
   if(safe){blob=file;name='TON_VIDEO_PRO_HDR_SAFE_ORIGINAL.'+(file.name.split('.').pop()||'mp4');detail='<div class="good">HDR Safe: เก็บไฟล์ต้นฉบับโดยไม่เข้ารหัสซ้ำ</div>';}
   else if(mode==='hdrtest'){
    if(!analysis?.hdr||!analysis.ten||!hdrEncoderAvailable||analysis.prim!=='bt2020'||!['smpte2084','arib-std-b67'].includes(analysis.trc))throw new Error('หยุดการทดสอบ: ต้องยืนยัน HDR, 10-bit, BT.2020, PQ/HLG และ libx265 ให้ครบก่อน');
+   if($('fps').value!=='keep'||$('res').value!=='keep')throw new Error('เลือก HDR Experimental ต้องตั้ง FPS และความละเอียดเป็นคงต้นฉบับ');
    const f=await loadFFmpeg();await f.writeFile('input_video',new Uint8Array(await file.arrayBuffer()));
    const trc=analysis.trc==='smpte2084'?'smpte2084':'arib-std-b67';
    const args=['-hide_banner','-i','input_video','-map','0:v:0','-map','0:a:0?','-map_metadata','0','-c:v','libx265','-preset','fast','-crf','24','-pix_fmt','yuv420p10le','-color_primaries','bt2020','-color_trc',trc,'-colorspace',analysis.space||'bt2020nc','-tag:v','hvc1','-x265-params',`repeat-headers=1:colorprim=bt2020:transfer=${trc}:colormatrix=${analysis.space||'bt2020nc'}`,'-movflags','+faststart'];
    if($('fps').value!=='keep')throw new Error('HDR Experimental รุ่นทดสอบนี้บังคับคง FPS ต้นฉบับก่อน เพื่อไม่เปลี่ยน cadence ระหว่างตรวจคุณภาพ');
    if($('res').value!=='keep')throw new Error('HDR Experimental รุ่นทดสอบนี้บังคับคงความละเอียดต้นฉบับก่อน');
    args.push('-c:a','copy','output_hdr_test.mp4');
-   say('กำลังทดสอบเข้ารหัส HEVC 10-bit HDR…');window.__tonProbeLogs=[];await f.exec(args);
-   say('เข้ารหัสเสร็จ กำลังตรวจสอบไฟล์ผลลัพธ์…');
+   say('กำลังทดสอบเข้ารหัส HEVC 10-bit HDR…');$('processStatus').textContent='กำลังเริ่มเข้ารหัส HEVC 10-bit HDR… ไฟล์ 4K อาจใช้เวลานานบนโทรศัพท์ กรุณาเปิดหน้านี้ค้างไว้';window.__tonProbeLogs=[];await f.exec(args);
+   say('เข้ารหัสเสร็จ กำลังตรวจสอบไฟล์ผลลัพธ์…');$('processStatus').textContent='เข้ารหัสเสร็จแล้ว กำลังตรวจสอบ HDR metadata ของไฟล์ใหม่…';
    window.__tonProbeLogs=[];await f.exec(['-hide_banner','-i','output_hdr_test.mp4','-map','0:v:0','-frames:v','1','-f','null','-']);
    const outputMeta=parse(window.__tonProbeLogs||[]);
    const verified=outputMeta.codec.toLowerCase().includes('hevc')&&outputMeta.ten&&outputMeta.prim==='bt2020'&&outputMeta.trc===trc&&outputMeta.space==='bt2020nc';
@@ -155,8 +157,8 @@ $('process').onclick=async()=>{
   }
   if(outputURL)URL.revokeObjectURL(outputURL);outputURL=URL.createObjectURL(blob);$('download').href=outputURL;$('download').download=name;
   const diff=file.size?((1-blob.size/file.size)*100):0;
-  $('report').innerHTML=detail+`<table><tr><td>ต้นฉบับ</td><td>${fmt(file.size)}</td></tr><tr><td>ผลลัพธ์</td><td>${fmt(blob.size)}</td></tr><tr><td>ขนาดเปลี่ยนแปลง</td><td>${blob===file?'ไม่มีการเข้ารหัสซ้ำ':(diff>=0?'ลดลง ':'เพิ่มขึ้น ')+Math.abs(diff).toFixed(1)+'%'}</td></tr></table>`;$('result').classList.remove('hidden');$('processStatus').textContent='เสร็จแล้ว';
- }catch(e){$('processStatus').textContent='ทำงานไม่สำเร็จ: '+(e?.message||String(e));}
+  $('processStatus').style.background='#12372f';$('processStatus').style.color='#b7f7dd';$('processStatus').textContent='ประมวลผลเสร็จแล้ว สามารถดาวน์โหลดไฟล์ในหัวข้อผลลัพธ์';$('report').innerHTML=detail+`<table><tr><td>ต้นฉบับ</td><td>${fmt(file.size)}</td></tr><tr><td>ผลลัพธ์</td><td>${fmt(blob.size)}</td></tr><tr><td>ขนาดเปลี่ยนแปลง</td><td>${blob===file?'ไม่มีการเข้ารหัสซ้ำ':(diff>=0?'ลดลง ':'เพิ่มขึ้น ')+Math.abs(diff).toFixed(1)+'%'}</td></tr></table>`;$('result').classList.remove('hidden');$('processStatus').textContent='เสร็จแล้ว';
+ }catch(e){console.error(e);$('processStatus').textContent='ทำงานไม่สำเร็จ: '+(e?.message||String(e));$('processStatus').style.background='#421f29';$('processStatus').style.color='#ffd1d9';}
  finally{busy=false;$('process').disabled=!file;$('analyze').disabled=!file}
 };
 </script></body></html>
