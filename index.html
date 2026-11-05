@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="th"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V3.2.1</title>
+<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V3.2.2</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:16px/1.55 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:18px 14px 48px}
 .card{background:#142239;border:1px solid #30435e;border-radius:17px;padding:17px;margin:14px 0}
@@ -15,7 +15,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
 </style></head><body><main>
 <h1>🎬 TON VIDEO PRO</h1>
-<p class="muted">V3.2.1 · HDR Capability Check · HDR Safe · 60 / 120 FPS · Local processing</p>
+<p class="muted">V3.2.2 · HDR Capability Check · HDR Safe · 60 / 120 FPS · Local processing</p>
 
 <section class="card"><h2>1. เลือกวิดีโอ</h2>
 <label class="drop">⬆️<br><b>แตะเพื่อเลือกไฟล์วิดีโอ</b><br><span class="muted">MP4 / MOV / WebM · ประมวลผลบนอุปกรณ์</span><input id="file" type="file" accept="video/*"></label>
@@ -45,7 +45,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;
 <section id="result" class="card hidden"><h2>4. ผลลัพธ์</h2><div id="report"></div><a id="download"><button>ดาวน์โหลดไฟล์</button></a></section>
 
 <section class="card"><h2>ข้อจำกัดที่ต้องทราบ</h2>
-<p class="small">V3.2.1 ตรวจสอบการมีอยู่ของ libx265 ก่อน แต่การพบ encoder เพียงอย่างเดียวยังไม่รับประกันการรักษา HDR10/HLG หรือ dynamic metadata จึงยังไม่เปิด HDR re-encode จนกว่าจะมีการทดสอบ end-to-end กับไฟล์ตัวอย่าง การรักษา HDR Safe คือคัดลอกไฟล์เดิมโดยไม่เข้ารหัสซ้ำ การแปลง 60 เป็น 120 FPS ไม่ใช่ AI Frame Interpolation และ TikTok ยังสามารถเข้ารหัสไฟล์ใหม่ได้</p>
+<p class="small">V3.2.2 ตรวจสอบการมีอยู่ของ libx265 ก่อน แต่การพบ encoder เพียงอย่างเดียวยังไม่รับประกันการรักษา HDR10/HLG หรือ dynamic metadata จึงยังไม่เปิด HDR re-encode จนกว่าจะมีการทดสอบ end-to-end กับไฟล์ตัวอย่าง การรักษา HDR Safe คือคัดลอกไฟล์เดิมโดยไม่เข้ารหัสซ้ำ การแปลง 60 เป็น 120 FPS ไม่ใช่ AI Frame Interpolation และ TikTok ยังสามารถเข้ารหัสไฟล์ใหม่ได้</p>
 <p class="small">ใช้ผ่าน HTTPS และ Chrome/Edge รุ่นใหม่ การวิเคราะห์ต้องโหลด FFmpeg.wasm จาก CDN ในครั้งแรก หากเครือข่ายบล็อก CDN จะแสดงขั้นตอนที่ล้มเหลว</p>
 </section>
 </main>
@@ -70,7 +70,7 @@ async function loadFFmpeg(){
  const {FFmpeg}=mod;const {toBlobURL}=utils;
  ffmpeg=new FFmpeg();
  ffmpeg.on('log',({message})=>{if(message)window.__tonProbeLogs=(window.__tonProbeLogs||[]).concat(message).slice(-500)});
- ffmpeg.on('progress',({progress})=>{const p=Math.round(Math.max(0,Math.min(1,progress))*100);setProgress(15+Math.round(p*.8));if(busy&&$('mode').value==='hdrtest')$('processStatus').textContent='กำลังเข้ารหัส HEVC 10-bit HDR… '+p+'% (อย่าปิดหน้าเว็บ)'});
+ ffmpeg.on('progress',({progress})=>{const p=Math.round(Math.max(0,Math.min(1,progress))*100);setProgress(15+Math.round(Math.min(p,99)*.8));if(busy&&$('mode').value==='hdrtest')$('processStatus').textContent=p>=100?'เข้ารหัสเฟรมครบแล้ว กำลังปิดไฟล์ MP4… (อย่าปิดหน้าเว็บ)':'กำลังเข้ารหัส HEVC 10-bit HDR… '+p+'% (อย่าปิดหน้าเว็บ)'});
  const core='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';
  say('ขั้นตอน 2/4: กำลังดาวน์โหลด FFmpeg Core และ WASM…');
  let coreURL,wasmURL;
@@ -130,12 +130,12 @@ $('process').onclick=async()=>{
    if($('fps').value!=='keep'||$('res').value!=='keep')throw new Error('เลือก HDR Experimental ต้องตั้ง FPS และความละเอียดเป็นคงต้นฉบับ');
    const f=await loadFFmpeg();await f.writeFile('input_video',new Uint8Array(await file.arrayBuffer()));
    const trc=analysis.trc==='smpte2084'?'smpte2084':'arib-std-b67';
-   const args=['-hide_banner','-i','input_video','-map','0:v:0','-map','0:a:0?','-map_metadata','0','-c:v','libx265','-preset','fast','-crf','24','-pix_fmt','yuv420p10le','-color_primaries','bt2020','-color_trc',trc,'-colorspace',analysis.space||'bt2020nc','-tag:v','hvc1','-x265-params',`repeat-headers=1:colorprim=bt2020:transfer=${trc}:colormatrix=${analysis.space||'bt2020nc'}`,'-movflags','+faststart'];
+   const args=['-hide_banner','-i','input_video','-map','0:v:0','-map','0:a:0?','-map_metadata','0','-c:v','libx265','-threads','1','-preset','ultrafast','-crf','24','-pix_fmt','yuv420p10le','-color_primaries','bt2020','-color_trc',trc,'-colorspace',analysis.space||'bt2020nc','-tag:v','hvc1','-x265-params',`repeat-headers=1:colorprim=bt2020:transfer=${trc}:colormatrix=${analysis.space||'bt2020nc'}`,'-movflags','+faststart'];
    if($('fps').value!=='keep')throw new Error('HDR Experimental รุ่นทดสอบนี้บังคับคง FPS ต้นฉบับก่อน เพื่อไม่เปลี่ยน cadence ระหว่างตรวจคุณภาพ');
    if($('res').value!=='keep')throw new Error('HDR Experimental รุ่นทดสอบนี้บังคับคงความละเอียดต้นฉบับก่อน');
    args.push('-c:a','copy','output_hdr_test.mp4');
    say('กำลังทดสอบเข้ารหัส HEVC 10-bit HDR…');$('processStatus').textContent='กำลังเริ่มเข้ารหัส HEVC 10-bit HDR… ไฟล์ 4K อาจใช้เวลานานบนโทรศัพท์ กรุณาเปิดหน้านี้ค้างไว้';window.__tonProbeLogs=[];await f.exec(args);
-   say('เข้ารหัสเสร็จ กำลังตรวจสอบไฟล์ผลลัพธ์…');$('processStatus').textContent='เข้ารหัสเสร็จแล้ว กำลังตรวจสอบ HDR metadata ของไฟล์ใหม่…';
+   say('เข้ารหัสเสร็จ กำลังตรวจสอบไฟล์ผลลัพธ์…');setProgress(96);$('processStatus').textContent='ปิดไฟล์สำเร็จแล้ว กำลังตรวจสอบ HDR metadata ของไฟล์ใหม่…';
    window.__tonProbeLogs=[];await f.exec(['-hide_banner','-i','output_hdr_test.mp4','-map','0:v:0','-frames:v','1','-f','null','-']);
    const outputMeta=parse(window.__tonProbeLogs||[]);
    const verified=outputMeta.codec.toLowerCase().includes('hevc')&&outputMeta.ten&&outputMeta.prim==='bt2020'&&outputMeta.trc===trc&&outputMeta.space==='bt2020nc';
@@ -143,7 +143,7 @@ $('process').onclick=async()=>{
    detail=verified?'<div class="good">ตรวจสอบหลังเข้ารหัสผ่าน: HEVC + 10-bit + BT.2020 + HLG/PQ metadata พบครบตามที่อ่านได้</div>':'<div class="bad">คำเตือน: ผลตรวจหลังเข้ารหัสไม่ครบเงื่อนไข HDR ที่ต้องการ กรุณาอย่าใช้ไฟล์นี้เป็นไฟล์เผยแพร่หลัก</div>';
    detail+='<div class="warn">ยังไม่สามารถรับรอง mastering-display / MaxCLL หรือ Dolby Vision dynamic metadata ได้ ต้องตรวจด้วยเครื่องมือเฉพาะและเทียบภาพจริงก่อนใช้งาน</div>';
    detail+=`<table><tr><td>Codec หลังเข้ารหัส</td><td>${esc(outputMeta.codec||'ไม่พบ')}</td></tr><tr><td>Pixel Format</td><td>${esc(outputMeta.pix||'ไม่พบ')}</td></tr><tr><td>Bit Depth</td><td>${outputMeta.ten?'10-bit':'ไม่ยืนยัน'}</td></tr><tr><td>Color Primaries</td><td>${esc(outputMeta.prim||'ไม่พบ')}</td></tr><tr><td>Transfer</td><td>${esc(outputMeta.trc||'ไม่พบ')}</td></tr><tr><td>Color Space</td><td>${esc(outputMeta.space||'ไม่พบ')}</td></tr><tr><td>ผลตรวจ HDR</td><td>${verified?'ผ่าน metadata ขั้นพื้นฐาน':'ไม่ผ่าน'}</td></tr></table>`;
-   await f.deleteFile('input_video');await f.deleteFile('output_hdr_test.mp4');
+   await f.deleteFile('input_video');await f.deleteFile('output_hdr_test.mp4');setProgress(100);
   } else {
    if(mode==='sdr'&&analysis?.hdr)throw new Error('ตรวจพบ HDR ห้ามใช้ SDR Optimizer กับไฟล์นี้');
    if(mode==='sdr'&&(!analysis||analysis.uncertain))throw new Error('ยังยืนยันไม่ได้ว่าเป็น SDR กรุณาใช้ HDR Safe');
