@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f"><title>TON SMOOTH ENGINE</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#101f33;--line:#29415e;--cyan:#52e0e2;--muted:#9bb0c8;--green:#7be0b0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#173654 0,var(--bg) 58%);color:#f1f7ff;font:15px/1.55 system-ui,sans-serif}
+main{max-width:760px;margin:auto;padding:22px 15px 55px}header{display:flex;align-items:center;gap:12px;margin:8px 0 22px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#52e0e2,#2386c7);display:grid;place-items:center;color:#061321;font-size:23px;font-weight:900}
+h1{font-size:23px;letter-spacing:.4px;margin:0}h2{font-size:17px;margin:0 0 12px}.sub,.muted{color:var(--muted);font-size:13px}.card{background:linear-gradient(145deg,#13253b,#0d1a2b);border:1px solid var(--line);border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 12px 30px #0002}
+.pick{display:block;text-align:center;border:2px dashed #456889;border-radius:15px;padding:25px 12px;background:#091727;cursor:pointer}.pick strong{display:block;font-size:16px}.pick input{display:none}
+button{width:100%;border:0;border-radius:12px;padding:14px;background:linear-gradient(90deg,#56e2e0,#55a9ed);color:#061321;font-weight:850;font-size:15px;margin-top:12px}button:disabled{opacity:.4}
+video{width:100%;max-height:320px;background:#000;border-radius:12px;margin-top:12px}.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:12px;border-radius:12px;background:#091727;border:1px solid #263c56}.metric span{display:block;color:var(--muted);font-size:12px}.metric b{font-size:17px;overflow-wrap:anywhere}
+select{width:100%;padding:12px;background:#091727;border:1px solid #38516e;color:#fff;border-radius:10px;margin-top:5px}
+.note{padding:12px;border-radius:12px;background:#30291a;color:#ffe2a4;font-size:13px}.good{background:#103328;color:#baf5da}.status{white-space:pre-wrap;padding:12px;background:#091727;border:1px solid #263c56;border-radius:11px;color:#c9d8e9;font-size:13px;margin-top:10px}
+footer{text-align:center;color:#748ba6;font-size:12px;margin-top:24px}a{color:var(--cyan)}
+@media(max-width:480px){.grid{grid-template-columns:1fr 1fr}main{padding:16px 12px 40px}}
+</style></head>
+<body><main>
+<header><div class="logo">T</div><div><h1>TON SMOOTH ENGINE</h1><div class="sub">LOCAL VIDEO ANALYZER · WEB EDITION</div></div></header>
+<section class="card"><h2>01 / เลือกวิดีโอ</h2>
+<label class="pick">🎞️<strong>แตะเพื่อเลือกวิดีโอจากเครื่อง</strong><span class="muted">MP4 · MOV · WebM — ไฟล์ไม่ถูกอัปโหลด</span><input id="file" type="file" accept="video/*"></label>
+<p id="fileName" class="muted">ยังไม่ได้เลือกไฟล์</p><video id="preview" controls playsinline class="hidden"></video>
+<button id="analyze" disabled>วิเคราะห์วิดีโอ</button><div id="status" class="status">รอเลือกไฟล์วิดีโอ · การประมวลผลทั้งหมดอยู่ในเบราว์เซอร์</div>
+</section>
+<section id="results" class="card hidden"><h2>02 / ข้อมูลต้นฉบับ</h2>
+<div class="grid">
+<div class="metric"><span>ความละเอียด</span><b id="resolution">—</b></div>
+<div class="metric"><span>FPS ที่วัดได้</span><b id="fps">—</b></div>
+<div class="metric"><span>ระยะเวลา</span><b id="duration">—</b></div>
+<div class="metric"><span>ขนาดไฟล์</span><b id="size">—</b></div>
+</div><p id="recommend" class="status"></p>
+</section>
+<section class="card"><h2>03 / เป้าหมายการส่งออก</h2>
+<div class="grid">
+<label>FPS เป้าหมาย<select id="target"><option value="60">60 FPS ขึ้นไป</option><option value="source">คง FPS ต้นฉบับ</option></select></label>
+<label>ความละเอียด<select disabled><option>Original — คงต้นฉบับ</option></select></label>
+<label>คุณภาพ<select disabled><option>Maximum — คุณภาพสูงสุด</option></select></label>
+<label>HDR<select disabled><option>Preserve — เมื่อรองรับ</option></select></label>
+</div>
+<div class="note" style="margin-top:12px">ระบบวิเคราะห์พร้อมใช้งาน แต่การสร้างเฟรมแทรกจริง (Frame Interpolation) และการส่งออกวิดีโอยังอยู่ระหว่างพัฒนา ปุ่มส่งออกจึงยังไม่เปิดใช้งาน เราจะไม่หลอกว่าเพิ่ม FPS ด้วยการทำซ้ำเฟรมแล้วเป็นภาพลื่นจริง</div>
+<button disabled>EXPORT — กำลังพัฒนา</button>
+</section>
+<section class="card"><h2>ความเป็นส่วนตัวและคุณภาพ</h2><p class="muted">เลือกและอ่านไฟล์ภายในอุปกรณ์เท่านั้น ไม่มีระบบอัปโหลดไฟล์ ไม่มีการเข้าสู่ระบบ TikTok และไม่โพสต์แทนคุณ การรักษา HDR จะเปิดใช้เมื่อทดสอบเส้นทางถอดรหัสและเข้ารหัสครบแล้วเท่านั้น ทั้งนี้ TikTok อาจบีบอัดวิดีโอซ้ำหลังอัปโหลด</p></section>
+<footer>TON SMOOTH ENGINE · WEB EDITION · v0.1.0</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);let selected=null,url=null;
+const fmtBytes=n=>{const u=['B','KB','MB','GB'];let i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?1:0)+' '+u[i]};
+const fmtTime=s=>{if(!Number.isFinite(s))return '—';const m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+String(sec).padStart(2,'0')};
+$('file').addEventListener('change',()=>{selected=$('file').files[0]||null;$('results').classList.add('hidden');$('analyze').disabled=!selected;if(url)URL.revokeObjectURL(url);if(!selected){$('preview').classList.add('hidden');$('fileName').textContent='ยังไม่ได้เลือกไฟล์';return}url=URL.createObjectURL(selected);$('preview').src=url;$('preview').classList.remove('hidden');$('fileName').textContent=selected.name+' · '+fmtBytes(selected.size);$('status').textContent='เลือกไฟล์แล้ว พร้อมวิเคราะห์ข้อมูลในเครื่อง'});
+async function measureFPS(video){return new Promise(resolve=>{const duration=Math.min(video.duration||0,4);if(!duration||!('requestVideoFrameCallback'in HTMLVideoElement.prototype)){resolve(null);return}let count=0,first=null,last=null,done=false;const finish=()=>{if(done)return;done=true;video.pause();video.currentTime=0;resolve(count>1&&last>first?(count-1)/((last-first)/1000):null)};const timer=setTimeout(finish,6500);const step=(now,meta)=>{if(done)return;if(first===null)first=meta.mediaTime*1000;last=meta.mediaTime*1000;count++;if(meta.mediaTime>=duration){clearTimeout(timer);finish();return}video.requestVideoFrameCallback(step)};video.currentTime=0;video.muted=true;video.play().then(()=>video.requestVideoFrameCallback(step)).catch(()=>{clearTimeout(timer);finish()})})}
+$('analyze').addEventListener('click',async()=>{if(!selected)return;$('analyze').disabled=true;$('status').textContent='กำลังอ่าน metadata และวัดเฟรมจากการเล่นตัวอย่างในเบราว์เซอร์…';const v=$('preview');try{await new Promise((res,rej)=>{if(v.readyState>=1)return res();v.onloadedmetadata=res;v.onerror=rej});const fps=await measureFPS(v);$('resolution').textContent=v.videoWidth+' × '+v.videoHeight;$('fps').textContent=fps?fps.toFixed(2)+' FPS':'อ่านไม่ได้';$('duration').textContent=fmtTime(v.duration);$('size').textContent=fmtBytes(selected.size);let msg='ไฟล์ต้นฉบับ: '+v.videoWidth+'×'+v.videoHeight+'. ';if(fps&&fps<59)msg+='แนะนำเป้าหมาย 60 FPS ด้วยการแทรกเฟรมจริง (ยังไม่เปิดใช้งานในเวอร์ชันนี้).';else if(fps)msg+='ต้นฉบับประมาณ 60 FPS ขึ้นไป แนะนำคง FPS เดิมเพื่อหลีกเลี่ยงการแปลงที่ไม่จำเป็น.';else msg+='ไม่สามารถวัด FPS ได้แน่นอนจากเบราว์เซอร์นี้';$('recommend').textContent=msg;$('results').classList.remove('hidden');$('status').textContent='วิเคราะห์เสร็จแล้ว · ไม่มีการอัปโหลดไฟล์'}catch(e){$('status').textContent='อ่านไฟล์ไม่สำเร็จ: '+e.message}finally{$('analyze').disabled=false}});
+</script></body></html>
