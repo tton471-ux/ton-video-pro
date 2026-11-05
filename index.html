@@ -1,157 +1,132 @@
 <!doctype html>
-<html lang="th">
-<head>
+<html lang="th"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101827"><title>TON VIDEO PRO V2.2</title>
+<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V2.3</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:15px/1.55 system-ui,sans-serif}
-main{max-width:900px;margin:auto;padding:22px 15px 50px}.card{background:#142239;border:1px solid #30435e;border-radius:17px;padding:17px;margin:14px 0}
-h1{margin:0;font-size:26px}h2{font-size:19px;margin:0 0 10px}h3{font-size:16px;margin:0 0 10px}.muted{color:#9fb0c7;font-size:13px}
-.drop{display:block;text-align:center;border:2px dashed #52749a;border-radius:14px;padding:26px 12px;background:#0b1728;cursor:pointer}.drop input{display:none}
-select,button{width:100%;padding:12px;border-radius:10px;border:1px solid #405674;background:#0b1728;color:#fff;margin-top:7px;font:inherit}
-button{background:#60a5fa;color:#071426;font-weight:800;border:0;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.bar{height:10px;background:#26364d;border-radius:20px;overflow:hidden;margin-top:12px}.bar i{display:block;height:100%;width:0;background:#34d399}
-.status{margin-top:12px;color:#cbd5e1;overflow-wrap:anywhere;white-space:pre-wrap}.note{background:#302719;color:#ffe4a3;border-radius:10px;padding:12px;font-size:13px}
-.good{background:#12372f;color:#b7f7dd;border-radius:10px;padding:12px;font-size:13px}.warn{background:#3b2c18;color:#ffe0a3;border-radius:10px;padding:12px;font-size:13px}
-table{width:100%;border-collapse:collapse;font-size:14px}td{padding:8px 3px;border-bottom:1px solid #30435e}td:last-child{text-align:right;color:#dbeafe;overflow-wrap:anywhere}
-a{color:inherit;text-decoration:none}.hidden{display:none}.pill{display:inline-block;border-radius:30px;padding:3px 9px;background:#253b58;font-size:12px;margin:2px}
+*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:16px/1.55 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:18px 14px 48px}
+.card{background:#142239;border:1px solid #30435e;border-radius:17px;padding:17px;margin:14px 0}
+h1{font-size:25px;margin:0}h2{font-size:19px;margin:0 0 10px}.muted{color:#9fb0c7;font-size:13px}
+.drop{display:block;text-align:center;border:2px dashed #52749a;border-radius:14px;padding:24px 10px;background:#0b1728;cursor:pointer}.drop input{display:none}
+button,select{width:100%;padding:13px;border-radius:10px;border:1px solid #405674;background:#0b1728;color:#fff;font:inherit;margin-top:7px}button{background:#60a5fa;color:#071426;font-weight:800;border:0}button:disabled{opacity:.45}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.good,.warn,.bad{padding:12px;border-radius:10px;margin-top:10px;font-size:14px}.good{background:#12372f;color:#b7f7dd}.warn{background:#3b2c18;color:#ffe0a3}.bad{background:#421f29;color:#ffd1d9}
+table{width:100%;border-collapse:collapse;font-size:14px}td{padding:8px 2px;border-bottom:1px solid #30435e;overflow-wrap:anywhere}td:last-child{text-align:right;color:#dbeafe}
+.status{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:10px;font-size:14px}.bar{height:9px;background:#26364d;border-radius:20px;overflow:hidden;margin-top:10px}.bar i{display:block;width:0;height:100%;background:#34d399}
+a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;color:#9fb0c7}
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
-</style></head>
-<body><main>
+</style></head><body><main>
 <h1>🎬 TON VIDEO PRO</h1>
-<p class="muted">V2.2 · HDR Safe Test · 60 / 120 FPS Export · Local browser processing</p>
+<p class="muted">V2.3 · Android Diagnostics · HDR Safe · 60 / 120 FPS · Local processing</p>
 
-<section class="card">
-<h2>1. เลือกวิดีโอ</h2>
-<label class="drop">⬆️<br><b>แตะเพื่อเลือกไฟล์วิดีโอ</b><br><span class="muted">MP4 / MOV / WebM · ประมวลผลบนอุปกรณ์ของคุณ</span><input id="file" type="file" accept="video/*"></label>
+<section class="card"><h2>1. เลือกวิดีโอ</h2>
+<label class="drop">⬆️<br><b>แตะเพื่อเลือกไฟล์วิดีโอ</b><br><span class="muted">MP4 / MOV / WebM · ประมวลผลบนอุปกรณ์</span><input id="file" type="file" accept="video/*"></label>
 <p id="fileInfo" class="muted">ยังไม่ได้เลือกไฟล์</p>
 </section>
 
-<section class="card">
-<h2>2. วิเคราะห์ไฟล์ต้นฉบับ</h2>
-<p class="muted">ระบบจะอ่านข้อมูลจาก Media/FFmpeg log เท่าที่เบราว์เซอร์และ FFmpeg.wasm เปิดเผย หากอ่าน HDR ไม่ได้ จะเลือกแนวทางปลอดภัยและไม่เข้ารหัสไฟล์ HDR โดยอัตโนมัติ</p>
+<section class="card"><h2>2. วิเคราะห์ไฟล์ต้นฉบับ</h2>
+<p class="muted">เวอร์ชันนี้จะแสดงแต่ละขั้นตอนการโหลดเครื่องมือและวิเคราะห์ เพื่อหาว่าหากล้มเหลวเกิดจาก CDN, Worker, FFmpeg หรือไฟล์วิดีโอ</p>
 <button id="analyze" disabled>วิเคราะห์วิดีโอ</button>
-<div id="analysis" class="hidden"><table id="analysisTable"></table><div id="hdrState" style="margin-top:12px"></div></div>
-</section>
-
-<section class="card">
-<h2>3. เลือกโหมดส่งออก</h2>
-<div class="grid">
-<label>โหมดวิดีโอ
-<select id="mode"><option value="safe" selected>HDR Safe — เก็บต้นฉบับเมื่อพบ/สงสัย HDR</option><option value="sdr">SDR Optimizer — H.264 สำหรับ SDR เท่านั้น</option></select></label>
-<label>FPS เป้าหมาย
-<select id="fps"><option value="60" selected>60 FPS</option><option value="120">120 FPS</option><option value="keep">คง FPS ต้นฉบับ</option></select></label>
-<label>ความละเอียด
-<select id="res"><option value="keep" selected>คงต้นฉบับ</option><option value="1080">สูงสุด 1080p</option><option value="720">สูงสุด 720p</option></select></label>
-<label>คุณภาพ SDR (CRF)
-<select id="crf"><option value="18">สูงมาก · CRF 18</option><option value="20" selected>สมดุล · CRF 20</option><option value="22">ไฟล์เล็กลง · CRF 22</option><option value="24">บีบอัดมาก · CRF 24</option></select></label>
-<label>เสียง
-<select id="audio"><option value="192" selected>AAC 192 kbps</option><option value="160">AAC 160 kbps</option><option value="128">AAC 128 kbps</option></select></label>
-</div>
-<div class="warn" style="margin-top:12px">ข้อจำกัดสำคัญ: โหมด SDR Optimizer ใช้ H.264 8-bit และไม่เหมาะกับ HDR ต้นฉบับ ส่วนการเลือก 120 FPS จากต้นฉบับ 60 FPS จะเพิ่มเฟรมด้วยการทำซ้ำ/แปลง cadence ไม่ได้สร้างการเคลื่อนไหวใหม่แบบ AI interpolation</div>
-<button id="go" disabled>เริ่มประมวลผล</button>
 <div class="bar"><i id="prog"></i></div><div id="status" class="status">เลือกไฟล์เพื่อเริ่มต้น</div>
+<div id="analysis" class="hidden"><table id="meta"></table><div id="hdr"></div></div>
 </section>
 
-<section id="result" class="card hidden">
-<h2>4. ผลลัพธ์</h2><div id="report"></div>
-<a id="download"><button>ดาวน์โหลดไฟล์ MP4</button></a>
+<section class="card"><h2>3. เลือกโหมดส่งออก</h2>
+<div class="grid">
+<label>โหมดวิดีโอ<select id="mode"><option value="safe">HDR Safe — เก็บต้นฉบับเมื่อพบ/สงสัย HDR</option><option value="sdr">SDR Optimizer — H.264 สำหรับ SDR เท่านั้น</option></select></label>
+<label>FPS เป้าหมาย<select id="fps"><option value="60">60 FPS</option><option value="120">120 FPS</option><option value="keep">คงต้นฉบับ</option></select></label>
+<label>ความละเอียด<select id="res"><option value="keep">คงต้นฉบับ</option><option value="1080">สูงสุด 1080p</option><option value="720">สูงสุด 720p</option></select></label>
+<label>คุณภาพ SDR<select id="crf"><option value="18">สูงมาก · CRF 18</option><option value="20" selected>สมดุล · CRF 20</option><option value="22">ไฟล์เล็กลง · CRF 22</option><option value="24">บีบอัดมาก · CRF 24</option></select></label>
+</div>
+<div class="warn">HDR Safe จะส่งออกไฟล์ต้นฉบับเดิมเมื่อพบ HDR หรืออ่านข้อมูลไม่ครบ จึงไม่ลดขนาดไฟล์และไม่เปลี่ยน FPS ส่วน SDR Optimizer ใช้ H.264 8-bit เท่านั้น ห้ามใช้กับ HDR</div>
+<button id="process" disabled>เริ่มประมวลผล</button><div id="processStatus" class="status"></div>
 </section>
 
-<section class="card">
-<h3>สิ่งที่ V2.2 ทำ / ไม่ได้ทำ</h3>
-<div class="good">HDR Safe: หากพบ HDR หรืออ่านข้อมูลไม่ชัดเจน ระบบจะเก็บไฟล์เดิมโดยไม่แปลงเป็น SDR เพื่อป้องกันการทำลาย HDR</div>
-<p class="muted">เวอร์ชันนี้ยังไม่มี x265 Main10 encoder ใน FFmpeg.wasm build ที่ใช้อยู่ จึงไม่อ้างว่าสามารถบีบอัด HDR 10-bit แบบรักษา HDR ได้ การรักษา HDR ในโหมด Safe คือการส่งไฟล์ต้นฉบับออกโดยไม่เข้ารหัสซ้ำ</p>
-<p class="note">TikTok อาจเข้ารหัสไฟล์ใหม่หลังอัปโหลด ไม่มีวิธีรับประกันหรือ Bypass การบีบอัดของ TikTok ได้ 100% ไฟล์ 120 FPS ก็อาจถูกแปลงลงได้เช่นกัน</p>
+<section id="result" class="card hidden"><h2>4. ผลลัพธ์</h2><div id="report"></div><a id="download"><button>ดาวน์โหลดไฟล์</button></a></section>
+
+<section class="card"><h2>ข้อจำกัดที่ต้องทราบ</h2>
+<p class="small">เวอร์ชันนี้ยังไม่มี HEVC x265 Main10 encoder สำหรับบีบอัด HDR โดยตรง การรักษา HDR ในโหมด Safe คือการคัดลอกไฟล์เดิมโดยไม่เข้ารหัสซ้ำ การแปลง 60 เป็น 120 FPS เป็นการเพิ่ม/ทำซ้ำเฟรมตามการตั้งค่า ไม่ใช่ AI Frame Interpolation และ TikTok ยังสามารถเข้ารหัสไฟล์ใหม่ได้</p>
+<p class="small">ใช้ผ่าน HTTPS และ Chrome/Edge รุ่นใหม่ การวิเคราะห์ต้องโหลด FFmpeg.wasm จาก CDN ในครั้งแรก หากเครือข่ายบล็อก CDN จะแสดงขั้นตอนที่ล้มเหลว</p>
 </section>
-<p class="muted">ต้องเปิดผ่าน HTTPS และต้องใช้อินเทอร์เน็ตในครั้งแรกเพื่อโหลด FFmpeg.wasm แนะนำ Chrome/Edge รุ่นใหม่ และพื้นที่ว่างมากกว่า 2–3 เท่าของไฟล์ต้นฉบับ</p>
 </main>
-
 <script type="module">
 const $=id=>document.getElementById(id);
-let file=null,ffmpeg=null,outUrl=null,busy=false,analysis=null;
-const fmt=n=>{if(!Number.isFinite(n))return 'ไม่ทราบ';const u=['B','KB','MB','GB'];let i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?2:0)+' '+u[i]};
-function say(t){$('status').textContent=t}
-function pct(n){$('prog').style.width=Math.max(0,Math.min(100,n))+'%'}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-$('file').addEventListener('change',e=>{
- file=e.target.files?.[0]||null;analysis=null;
- $('fileInfo').textContent=file?`${file.name} · ${fmt(file.size)} · ${file.type||'ชนิดไฟล์ไม่ระบุ'}`:'ยังไม่ได้เลือกไฟล์';
- $('analyze').disabled=!file;$('go').disabled=!file;$('analysis').classList.add('hidden');$('result').classList.add('hidden');
- say(file?'พร้อมวิเคราะห์ไฟล์':'เลือกไฟล์เพื่อเริ่มต้น');
-});
-async function loadEngine(){
+let file=null,ffmpeg=null,analysis=null,busy=false,outputURL=null;
+const fmt=n=>{if(!Number.isFinite(n))return 'ไม่ทราบ';let u=['B','KB','MB','GB'],i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?2:0)+' '+u[i]};
+const say=t=>$('status').textContent=t;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function setProgress(v){$('prog').style.width=Math.max(0,Math.min(100,v))+'%'}
+$('file').onchange=e=>{file=e.target.files?.[0]||null;analysis=null;$('fileInfo').textContent=file?`${file.name} · ${fmt(file.size)} · ${file.type||'video'}`:'ยังไม่ได้เลือกไฟล์';$('analyze').disabled=!file;$('process').disabled=!file;$('analysis').classList.add('hidden');$('result').classList.add('hidden');say(file?'พร้อมวิเคราะห์ไฟล์':'เลือกไฟล์เพื่อเริ่มต้น')};
+
+async function loadFFmpeg(){
  if(ffmpeg?.loaded)return ffmpeg;
- say('กำลังโหลด FFmpeg.wasm…');
- const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');
- const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js');
+ say('ขั้นตอน 1/4: กำลังโหลดโมดูล FFmpeg จาก CDN…');
+ const pkg='https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm';
+ const util='https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm';
+ let mod,utils;
+ try{mod=await import(pkg+'/index.js');utils=await import(util+'/index.js')}
+ catch(e){throw new Error('โหลด JavaScript จาก CDN ไม่สำเร็จ: '+(e?.message||e))}
+ const {FFmpeg}=mod;const {toBlobURL}=utils;
  ffmpeg=new FFmpeg();
- ffmpeg.on('progress',({progress})=>{pct(10+Math.max(0,Math.min(1,progress))*85);say('กำลังประมวลผลวิดีโอ…')});
- ffmpeg.on('log',({message})=>{if(message)window.__tonLogs=(window.__tonLogs||[]).concat(message).slice(-300)});
- const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
- const coreURL=await toBlobURL(base+'/ffmpeg-core.js','text/javascript');
- const wasmURL=await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm');
- await ffmpeg.load({coreURL,wasmURL});return ffmpeg;
+ ffmpeg.on('log',({message})=>{if(message)window.__tonProbeLogs=(window.__tonProbeLogs||[]).concat(message).slice(-500)});
+ ffmpeg.on('progress',({progress})=>{setProgress(15+Math.round(Math.max(0,Math.min(1,progress))*80))});
+ const core='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+ say('ขั้นตอน 2/4: กำลังดาวน์โหลด FFmpeg Core และ WASM…');
+ let coreURL,wasmURL;
+ try{coreURL=await toBlobURL(core+'/ffmpeg-core.js','text/javascript');wasmURL=await toBlobURL(core+'/ffmpeg-core.wasm','application/wasm')}
+ catch(e){throw new Error('ดาวน์โหลด FFmpeg Core/WASM ไม่สำเร็จ: '+(e?.message||e))}
+ say('ขั้นตอน 3/4: กำลังเริ่ม Worker และ FFmpeg…');
+ try{await ffmpeg.load({coreURL,wasmURL})}
+ catch(e){ffmpeg=null;throw new Error('เริ่ม FFmpeg Worker ไม่สำเร็จ: '+(e?.message||e))}
+ say('ขั้นตอน 4/4: โหลด FFmpeg สำเร็จ');return ffmpeg;
 }
-function parseLogs(logs){
+function parse(logs){
  const s=logs.join('\n');
- const pick=(re)=>{const m=s.match(re);return m?m[1]:''};
- const width=pick(/,\\s*(\\d{2,5})x(\\d{2,5})[,\\s]/);
  const dim=s.match(/,\\s*(\\d{2,5})x(\\d{2,5})[,\\s]/);
- const fps=pick(/(\\d+(?:\\.\\d+)?)\\s*fps/);
- const codec=pick(/Video:\\s*([\\w\\d_]+)/i);
- const pix=pick(/(yuv\\w+p?\\d*le|yuv\\w+p?\\d*|p010le|rgb\\w+)/i);
- const transfer=pick(/\\b(smpte2084|arib-std-b67|bt709)\\b/i);
- const prim=pick(/\\b(bt2020|bt709)\\b/i);
+ const fps=(s.match(/(\\d+(?:\\.\\d+)?)\\s*fps/i)||[])[1]||'';
+ const codec=(s.match(/Video:\\s*([\\w\\d_]+)/i)||[])[1]||'';
+ const pix=(s.match(/\\b(yuv\\w+p?\\d*le|yuv\\w+p?\\d*|p010le|rgb\\w+)\\b/i)||[])[1]||'';
  const hdr=/smpte2084|arib-std-b67|bt2020|mastering display|content light level|dovi|dolby vision|hdr10/i.test(s);
- const tenBit=/10le|p010|yuv420p10|yuv422p10|yuv444p10/i.test(pix||s);
- const sdr=/bt709/i.test(transfer+' '+prim) && !hdr;
- const uncertain=!hdr&&!sdr;
- return {width:dim?dim[1]:'',height:dim?dim[2]:'',fps,codec,pix,transfer,prim,hdr,tenBit,sdr,uncertain,raw:s.slice(-5000)};
+ const sdr=/bt709/i.test(s)&&!hdr;
+ const ten=/10le|p010|yuv420p10|yuv422p10|yuv444p10/i.test(pix);
+ return {width:dim?.[1]||'',height:dim?.[2]||'',fps,codec,pix,hdr,sdr,ten,uncertain:!hdr&&!sdr};
 }
-$('analyze').addEventListener('click',async()=>{
- if(!file||busy)return;busy=true;$('analyze').disabled=true;$('go').disabled=true;window.__tonLogs=[];
+$('analyze').onclick=async()=>{
+ if(!file||busy)return;busy=true;$('analyze').disabled=true;$('process').disabled=true;$('analysis').classList.add('hidden');setProgress(0);window.__tonProbeLogs=[];
  try{
-  const eng=await loadEngine();await eng.writeFile('ton_input',new Uint8Array(await file.arrayBuffer()));
-  say('กำลังอ่านข้อมูลวิดีโอ…');await eng.exec(['-hide_banner','-i','ton_input','-f','null','-']);
-  analysis=parseLogs(window.__tonLogs||[]);
-  const rows=[['ชื่อไฟล์',file.name],['ขนาด',fmt(file.size)],['Codec',analysis.codec||'อ่านไม่ได้'],['ความละเอียด',analysis.width?analysis.width+' × '+analysis.height:'อ่านไม่ได้'],['FPS',analysis.fps||'อ่านไม่ได้'],['Pixel Format',analysis.pix||'อ่านไม่ได้'],['Color Transfer',analysis.transfer||'ไม่พบใน log'],['Color Primaries',analysis.prim||'ไม่พบใน log'],['Bit Depth',analysis.tenBit?'มีแนวโน้มเป็น 10-bit':'ไม่ยืนยัน 10-bit']];
-  $('analysisTable').innerHTML=rows.map(r=>`<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td></tr>`).join('');
-  $('hdrState').innerHTML=analysis.hdr?'<div class="good">ตรวจพบสัญญาณ HDR — แนะนำ HDR Safe และเก็บต้นฉบับ</div>':analysis.uncertain?'<div class="warn">ยังยืนยัน SDR/HDR ไม่ได้ — ระบบจะถือว่าไม่ปลอดภัยต่อการเข้ารหัสและเก็บต้นฉบับใน HDR Safe</div>':'<div class="good">ไม่พบสัญญาณ HDR และพบ BT.709 — มีแนวโน้มเป็น SDR</div>';
-  $('analysis').classList.remove('hidden');say('วิเคราะห์เสร็จแล้ว');$('go').disabled=false;
- }catch(err){console.error(err);analysis={uncertain:true};$('analysis').classList.remove('hidden');$('analysisTable').innerHTML='<tr><td>สถานะ</td><td>อ่านข้อมูลไม่สำเร็จ</td></tr>';$('hdrState').innerHTML='<div class="warn">อ่านข้อมูลไม่ได้ — เพื่อความปลอดภัย HDR Safe จะเก็บไฟล์ต้นฉบับโดยไม่เข้ารหัส</div>';say('อ่านข้อมูลไม่สำเร็จ ระบบจะใช้แนวทางปลอดภัย');$('go').disabled=false}
- finally{busy=false;$('analyze').disabled=!file}
-});
-$('go').addEventListener('click',async()=>{
- if(!file||busy)return;busy=true;$('go').disabled=true;$('analyze').disabled=true;$('result').classList.add('hidden');pct(0);
+  const f=await loadFFmpeg();
+  say('กำลังส่งไฟล์เข้า FFmpeg virtual filesystem…');
+  await f.writeFile('input_video',new Uint8Array(await file.arrayBuffer()));
+  say('กำลังอ่าน stream metadata ด้วย FFmpeg…');
+  // Decode to null to obtain stream details; does not create an output file.
+  await f.exec(['-hide_banner','-i','input_video','-map','0:v:0','-frames:v','1','-f','null','-']);
+  analysis=parse(window.__tonProbeLogs||[]);
+  const rows=[['ชื่อไฟล์',file.name],['ขนาด',fmt(file.size)],['Codec',analysis.codec||'ไม่พบ'],['ความละเอียด',analysis.width?analysis.width+' × '+analysis.height:'ไม่พบ'],['FPS',analysis.fps||'ไม่พบ'],['Pixel Format',analysis.pix||'ไม่พบ'],['Bit Depth',analysis.ten?'พบสัญญาณ 10-bit':'ยังยืนยัน 10-bit ไม่ได้']];
+  $('meta').innerHTML=rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('');
+  $('hdr').innerHTML=analysis.hdr?'<div class="good">พบสัญญาณ HDR จาก metadata/log — เลือก HDR Safe</div>':analysis.sdr?'<div class="good">พบ BT.709 และไม่พบสัญญาณ HDR — มีแนวโน้มเป็น SDR</div>':'<div class="warn">ข้อมูลสีไม่เพียงพอที่จะยืนยัน HDR/SDR — HDR Safe จะเก็บไฟล์ต้นฉบับไว้</div>';
+  $('analysis').classList.remove('hidden');say('วิเคราะห์เสร็จแล้ว');setProgress(100);
+ }catch(e){console.error(e);analysis={uncertain:true};$('analysis').classList.remove('hidden');$('meta').innerHTML='<tr><td>ผลวิเคราะห์</td><td>ไม่สำเร็จ</td></tr>'; $('hdr').innerHTML='<div class="warn">ระบบอ่านข้อมูลไม่สำเร็จ เพื่อความปลอดภัยให้ใช้ HDR Safe ซึ่งจะเก็บต้นฉบับโดยไม่เข้ารหัส</div>';say('เกิดข้อผิดพลาดจริง:\\n'+(e?.message||String(e))+'\\n\\nถ่ายภาพหน้าจอข้อความนี้ส่งให้ผู้พัฒนาได้เลย');}
+ finally{busy=false;$('analyze').disabled=!file;$('process').disabled=!file}
+};
+$('process').onclick=async()=>{
+ if(!file||busy)return;busy=true;$('process').disabled=true;$('analyze').disabled=true;$('result').classList.add('hidden');
  try{
-  const mode=$('mode').value, targetFps=$('fps').value;
-  const safeHdr=mode==='safe'&&(!analysis||analysis.hdr||analysis.uncertain);
-  let blob,filename,desc;
-  if(safeHdr){
-   blob=file;filename='TON_VIDEO_PRO_HDR_SAFE_ORIGINAL.'+(file.name.split('.').pop()||'mp4');
-   desc='<div class="good">HDR Safe ทำงาน: ส่งออกไฟล์ต้นฉบับโดยไม่เข้ารหัสซ้ำ เพื่อรักษา HDR / 10-bit / Metadata ที่มีอยู่</div>';
-   if(targetFps!=='keep')desc+='<p class="muted">ไม่ได้เปลี่ยน FPS เพราะโหมดนี้รักษาไฟล์ต้นฉบับทั้งไฟล์</p>';
-   pct(100);say('เสร็จแล้ว: เก็บต้นฉบับเพื่อป้องกัน HDR');
-  }else{
-   if(mode==='sdr'&&analysis?.hdr)throw new Error('ตรวจพบ HDR กรุณาเปลี่ยนเป็น HDR Safe ก่อน เพื่อป้องกันการสูญเสีย HDR');
-   const eng=await loadEngine();await eng.writeFile('ton_input',new Uint8Array(await file.arrayBuffer()));
-   const args=['-hide_banner','-i','ton_input','-map','0:v:0','-map','0:a:0?','-c:v','libx264','-preset','veryfast','-crf',$('crf').value,'-pix_fmt','yuv420p','-movflags','+faststart'];
+  const safe=$('mode').value==='safe'&&(!analysis||analysis.hdr||analysis.uncertain);
+  let blob,name,detail;
+  if(safe){blob=file;name='TON_VIDEO_PRO_HDR_SAFE_ORIGINAL.'+(file.name.split('.').pop()||'mp4');detail='<div class="good">HDR Safe: เก็บไฟล์ต้นฉบับโดยไม่เข้ารหัสซ้ำ</div>';}
+  else{
+   if($('mode').value==='sdr'&&analysis?.hdr)throw new Error('ตรวจพบ HDR ห้ามใช้ SDR Optimizer กับไฟล์นี้');
+   if($('mode').value==='sdr'&&(!analysis||analysis.uncertain))throw new Error('ยังยืนยันไม่ได้ว่าเป็น SDR กรุณาใช้ HDR Safe');
+   const f=await loadFFmpeg();await f.writeFile('input_video',new Uint8Array(await file.arrayBuffer()));
+   const args=['-hide_banner','-i','input_video','-map','0:v:0','-map','0:a:0?','-c:v','libx264','-preset','veryfast','-crf',$('crf').value,'-pix_fmt','yuv420p','-movflags','+faststart'];
    const r=$('res').value;if(r!=='keep')args.push('-vf',`scale=-2:'min(${r},ih)'`);
-   if(targetFps!=='keep'){args.push('-r',targetFps,'-fps_mode','cfr');}
-   args.push('-c:a','aac','-b:a',$('audio').value+'k','ton_output.mp4');
-   say('กำลังเข้ารหัส SDR ด้วย H.264…');await eng.exec(args);
-   const data=await eng.readFile('ton_output.mp4');blob=new Blob([data],{type:'video/mp4'});filename='TON_VIDEO_PRO_SDR_OPTIMIZED.mp4';
-   desc='<div class="warn">ไฟล์นี้ถูกส่งออกเป็น H.264 8-bit SDR (BT.709 workflow) ไม่ใช่ HDR 10-bit — ใช้เฉพาะเมื่อยืนยันว่าไฟล์ต้นฉบับเป็น SDR</div>';
-   await eng.deleteFile('ton_input');await eng.deleteFile('ton_output.mp4');
-   pct(100);say('เข้ารหัสเสร็จแล้ว');
+   const fps=$('fps').value;if(fps!=='keep')args.push('-r',fps,'-fps_mode','cfr');
+   args.push('-c:a','aac','-b:a','192k','output.mp4');
+   say('กำลังเข้ารหัส SDR…');await f.exec(args);const data=await f.readFile('output.mp4');blob=new Blob([data],{type:'video/mp4'});name='TON_VIDEO_PRO_SDR_OPTIMIZED.mp4';detail='<div class="warn">ส่งออกเป็น H.264 8-bit SDR เท่านั้น</div>';
+   await f.deleteFile('input_video');await f.deleteFile('output.mp4');
   }
-  if(outUrl)URL.revokeObjectURL(outUrl);outUrl=URL.createObjectURL(blob);
-  $('download').href=outUrl;$('download').download=filename;
-  const saved=file.size?((1-blob.size/file.size)*100):0;
-  $('report').innerHTML=desc+`<table><tr><td>ไฟล์ต้นฉบับ</td><td>${fmt(file.size)}</td></tr><tr><td>ไฟล์ผลลัพธ์</td><td>${fmt(blob.size)}</td></tr><tr><td>การเปลี่ยนแปลงขนาด</td><td>${blob===file?'ไม่มีการเข้ารหัสซ้ำ':(saved>=0?'ลดลง ':'ใหญ่ขึ้น ')+Math.abs(saved).toFixed(1)+'%'}</td></tr><tr><td>FPS ที่เลือก</td><td>${targetFps==='keep'?'คงต้นฉบับ':targetFps+' FPS (หากเข้ารหัส SDR)'}</td></tr></table>`;
-  $('result').classList.remove('hidden');
- }catch(err){console.error(err);say('ทำงานไม่สำเร็จ: '+(err?.message||String(err)))}
- finally{busy=false;$('go').disabled=!file;$('analyze').disabled=!file}
-});
+  if(outputURL)URL.revokeObjectURL(outputURL);outputURL=URL.createObjectURL(blob);$('download').href=outputURL;$('download').download=name;
+  const diff=file.size?((1-blob.size/file.size)*100):0;
+  $('report').innerHTML=detail+`<table><tr><td>ต้นฉบับ</td><td>${fmt(file.size)}</td></tr><tr><td>ผลลัพธ์</td><td>${fmt(blob.size)}</td></tr><tr><td>ขนาดเปลี่ยนแปลง</td><td>${blob===file?'ไม่มีการเข้ารหัสซ้ำ':(diff>=0?'ลดลง ':'เพิ่มขึ้น ')+Math.abs(diff).toFixed(1)+'%'}</td></tr></table>`;$('result').classList.remove('hidden');$('processStatus').textContent='เสร็จแล้ว';
+ }catch(e){$('processStatus').textContent='ทำงานไม่สำเร็จ: '+(e?.message||String(e));}
+ finally{busy=false;$('process').disabled=!file;$('analyze').disabled=!file}
+};
 </script></body></html>
