@@ -86,6 +86,9 @@ function parse(logs){
  const fps=(s.match(/([\d]+(?:\.[\d]+)?)\s*fps/i)||[])[1]||'';
  const codec=(s.match(/Video:\s*([a-zA-Z0-9_]+)/i)||[])[1]||'';
  const pix=(s.match(/\b(yuv[a-zA-Z0-9_]*|p010le|rgb[a-zA-Z0-9_]*)\b/i)||[])[1]||'';
+ const prim=(s.match(/\b(bt2020|bt709)\b/i)||[])[1]?.toLowerCase()||'';
+ const trc=(s.match(/\b(smpte2084|arib-std-b67)\b/i)||[])[1]?.toLowerCase()||'';
+ const space=(s.match(/\b(bt2020nc|bt2020c|bt709)\b/i)||[])[1]?.toLowerCase()||'';
  const hdr=/smpte2084|arib-std-b67|bt2020|mastering display|content light level|dovi|dolby vision|hdr10/i.test(s);
  const sdr=/bt709/i.test(s)&&!hdr;
  const ten=/10le|p010|10bit|main 10/i.test(s);
