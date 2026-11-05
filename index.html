@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="th"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V2.3.2</title>
+<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V2.3.3</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:16px/1.55 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:18px 14px 48px}
 .card{background:#142239;border:1px solid #30435e;border-radius:17px;padding:17px;margin:14px 0}
@@ -15,7 +15,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
 </style></head><body><main>
 <h1>🎬 TON VIDEO PRO</h1>
-<p class="muted">V2.3.2 · Android Diagnostics · HDR Safe · 60 / 120 FPS · Local processing</p>
+<p class="muted">V2.3.3 · Android Diagnostics · HDR Safe · 60 / 120 FPS · Local processing</p>
 
 <section class="card"><h2>1. เลือกวิดีโอ</h2>
 <label class="drop">⬆️<br><b>แตะเพื่อเลือกไฟล์วิดีโอ</b><br><span class="muted">MP4 / MOV / WebM · ประมวลผลบนอุปกรณ์</span><input id="file" type="file" accept="video/*"></label>
@@ -80,13 +80,13 @@ async function loadFFmpeg(){
 }
 function parse(logs){
  const s=logs.join('\n');
- const dim=s.match(/,\\s*(\\d{2,5})x(\\d{2,5})[,\\s]/);
- const fps=(s.match(/(\\d+(?:\\.\\d+)?)\\s*fps/i)||[])[1]||'';
- const codec=(s.match(/Video:\\s*([\\w\\d_]+)/i)||[])[1]||'';
- const pix=(s.match(/\\b(yuv\\w+p?\\d*le|yuv\\w+p?\\d*|p010le|rgb\\w+)\\b/i)||[])[1]||'';
+ const dim=s.match(/(\d{2,5})x(\d{2,5})/);
+ const fps=(s.match(/([\d]+(?:\.[\d]+)?)\s*fps/i)||[])[1]||'';
+ const codec=(s.match(/Video:\s*([a-zA-Z0-9_]+)/i)||[])[1]||'';
+ const pix=(s.match(/\b(yuv[a-zA-Z0-9_]*|p010le|rgb[a-zA-Z0-9_]*)\b/i)||[])[1]||'';
  const hdr=/smpte2084|arib-std-b67|bt2020|mastering display|content light level|dovi|dolby vision|hdr10/i.test(s);
  const sdr=/bt709/i.test(s)&&!hdr;
- const ten=/10le|p010|yuv420p10|yuv422p10|yuv444p10/i.test(pix);
+ const ten=/10le|p010|10bit|main 10/i.test(s);
  return {width:dim?.[1]||'',height:dim?.[2]||'',fps,codec,pix,hdr,sdr,ten,uncertain:!hdr&&!sdr};
 }
 $('analyze').onclick=async()=>{
