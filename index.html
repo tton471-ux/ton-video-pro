@@ -103,7 +103,7 @@ $('analyze').onclick=async()=>{
   say('กำลังตรวจสอบตัวเข้ารหัส HEVC x265…');
   window.__tonProbeLogs=[];
   await f.exec(['-hide_banner','-encoders']);
-  const encoderText=(window.__tonProbeLogs||[]).join('\\n');
+  const encoderText=(window.__tonProbeLogs||[]).join('\n');
   hdrEncoderAvailable=/\\blibx265\\b/i.test(encoderText);
   const rows=[['ชื่อไฟล์',file.name],['ขนาด',fmt(file.size)],['Codec',analysis.codec||'ไม่พบ'],['ความละเอียด',analysis.width?analysis.width+' × '+analysis.height:'ไม่พบ'],['FPS',analysis.fps||'ไม่พบ'],['Pixel Format',analysis.pix||'ไม่พบ'],['Bit Depth',analysis.ten?'พบสัญญาณ 10-bit':'ยังยืนยัน 10-bit ไม่ได้']];
   $('meta').innerHTML=rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('');
