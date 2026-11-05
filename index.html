@@ -1,38 +1,129 @@
 <!doctype html>
-<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101827"><title>TON VIDEO PRO</title>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827"><title>TON VIDEO PRO</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:15px/1.5 system-ui,sans-serif}main{max-width:820px;margin:auto;padding:24px 16px}.card{background:#142239;border:1px solid #30435e;border-radius:18px;padding:18px;margin:14px 0}h1{margin:0;font-size:26px}.muted{color:#9fb0c7;font-size:13px}.drop{display:block;text-align:center;border:2px dashed #52749a;border-radius:14px;padding:28px 12px;background:#0b1728;cursor:pointer}.drop input{display:none}select,button{width:100%;padding:12px;border-radius:10px;border:1px solid #405674;background:#0b1728;color:#fff;margin-top:7px}button{background:#60a5fa;color:#071426;font-weight:800;border:0;cursor:pointer}button:disabled{opacity:.5}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.bar{height:10px;background:#26364d;border-radius:20px;overflow:hidden;margin-top:12px}.bar i{display:block;height:100%;width:0;background:#34d399}.status{margin-top:12px;color:#cbd5e1;overflow-wrap:anywhere}.result{display:none}.note{background:#302719;color:#ffe4a3;border-radius:10px;padding:12px;font-size:13px}a{color:inherit;text-decoration:none}@media(max-width:540px){.grid{grid-template-columns:1fr}}
-</style></head><body><main>
-<h1>🎬 TON VIDEO PRO</h1><p class="muted">Smart Video Compressor · เตรียมไฟล์สำหรับ TikTok / Reels / Shorts</p>
-<section class="card"><h3>1. เลือกวิดีโอ</h3><label class="drop">⬆️<br><b>แตะเพื่อเลือกวิดีโอ</b><br><span class="muted">MP4, MOV, WebM</span><input id="file" type="file" accept="video/*"></label><p id="info" class="muted"></p></section>
-<section class="card"><h3>2. ตั้งค่าการบีบอัด</h3><div class="grid">
+*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:15px/1.5 system-ui,sans-serif}
+main{max-width:900px;margin:auto;padding:22px 15px}.muted{color:#9fb0c7;font-size:13px}
+h1{margin:0;font-size:27px}h3{margin:0 0 12px}.card{background:#142239;border:1px solid #30435e;border-radius:18px;padding:17px;margin:14px 0}
+.drop{display:block;text-align:center;border:2px dashed #52749a;border-radius:14px;padding:26px 12px;background:#0b1728;cursor:pointer}
+.drop input{display:none}select,button{width:100%;padding:12px;border-radius:10px;border:1px solid #405674;background:#0b1728;color:#fff;margin-top:7px}
+button{background:#60a5fa;color:#071426;font-weight:800;border:0;cursor:pointer}button:disabled{opacity:.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.bar{height:10px;background:#26364d;border-radius:20px;overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:#34d399}.status{margin-top:12px;color:#cbd5e1;overflow-wrap:anywhere}
+.result{display:none}.note{background:#302719;color:#ffe4a3;border-radius:10px;padding:12px;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:12px 0}.stat{background:#0b1728;border:1px solid #30435e;border-radius:12px;padding:12px;text-align:center}
+.stat b{display:block;font-size:19px;color:#6ee7b7}.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+video{width:100%;background:#000;border-radius:12px;max-height:340px}.vlabel{font-weight:800;margin:8px 0}
+a{color:inherit;text-decoration:none}.small{font-size:12px;color:#9fb0c7}
+@media(max-width:600px){.grid,.compare{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}}
+</style></head>
+<body><main>
+<h1>🎬 TON VIDEO PRO</h1>
+<p class="muted">Smart Video Compressor · เตรียมไฟล์สำหรับ TikTok / Reels / Shorts</p>
+
+<section class="card">
+<h3>1. เลือกวิดีโอ</h3>
+<label class="drop">⬆️<br><b>แตะเพื่อเลือกวิดีโอ</b><br><span class="muted">MP4, MOV, WebM</span><input id="file" type="file" accept="video/*"></label>
+<p id="info" class="muted">ยังไม่ได้เลือกวิดีโอ</p>
+</section>
+
+<section class="card">
+<h3>2. ตั้งค่าการบีบอัด</h3>
+<div class="grid">
 <label>ความละเอียด<select id="res"><option value="keep">คงต้นฉบับ</option><option value="1080" selected>สูงสุด 1080p</option><option value="720">สูงสุด 720p</option></select></label>
-<label>FPS<select id="fps"><option value="keep">คงต้นฉบับ</option><option value="30">30</option><option value="60">60</option></select></label>
+<label>FPS<select id="fps"><option value="keep">คงต้นฉบับ</option><option value="30">30 FPS</option><option value="60">60 FPS</option></select></label>
 <label>คุณภาพ<select id="crf"><option value="18">สูงมาก</option><option value="20" selected>สมดุล</option><option value="22">ไฟล์เล็กลง</option><option value="24">บีบอัดมาก</option></select></label>
-<label>เสียง<select id="audio"><option value="192" selected>AAC 192 kbps</option><option value="128">AAC 128 kbps</option></select></label></div>
-<button id="go" disabled>เริ่มบีบอัด</button><div class="bar"><i id="prog"></i></div><div id="status" class="status">เลือกวิดีโอเพื่อเริ่มต้น</div></section>
-<section id="result" class="card result"><h3>3. ดาวน์โหลดผลลัพธ์</h3><p id="sizes"></p><a id="download"><button>ดาวน์โหลด MP4</button></a></section>
-<p class="note">หมายเหตุ: TikTok จะเข้ารหัสวิดีโอใหม่หลังอัปโหลด จึงรับประกันไม่ได้ว่าจะไม่บีบอัดซ้ำ เว็บนี้ช่วยเตรียมไฟล์ให้เหมาะสมเท่านั้น การประมวลผลเกิดขึ้นบนอุปกรณ์ของคุณ</p><p class="muted">การโหลดเครื่องมือครั้งแรกต้องใช้อินเทอร์เน็ตและอาจใช้เวลาหลายนาที แนะนำให้เปิดผ่านเว็บไซต์ HTTPS ไม่ใช่เปิดไฟล์ HTML โดยตรง</p>
-</main><script type="module">
-const $=id=>document.getElementById(id);let file=null,ffmpeg=null,outUrl=null,busy=false;
+<label>เสียง<select id="audio"><option value="192" selected>AAC 192 kbps</option><option value="128">AAC 128 kbps</option></select></label>
+</div>
+<button id="go" disabled>เริ่มบีบอัดวิดีโอ</button>
+<div class="bar"><i id="prog"></i></div><div id="status" class="status">เลือกวิดีโอเพื่อเริ่มต้น</div>
+</section>
+
+<section id="result" class="card result">
+<h3>3. เปรียบเทียบก่อนและหลังบีบอัด</h3>
+<div class="stats">
+<div class="stat"><span class="small">ขนาดไฟล์เดิม</span><b id="beforeSize">—</b></div>
+<div class="stat"><span class="small">ขนาดไฟล์ใหม่</span><b id="afterSize">—</b></div>
+<div class="stat"><span class="small">ประหยัดพื้นที่</span><b id="saved">—</b></div>
+</div>
+<div class="compare">
+<div><div class="vlabel">🔵 ก่อนบีบอัด</div><video id="beforeVideo" controls playsinline></video><div class="small" id="beforeName"></div></div>
+<div><div class="vlabel">🟢 หลังบีบอัด</div><video id="afterVideo" controls playsinline></video><div class="small" id="afterName"></div></div>
+</div>
+<p class="small">แตะเล่นวิดีโอทั้งสองฝั่งเพื่อเทียบความคมชัดและรายละเอียดด้วยตา</p>
+<a id="download"><button>⬇️ ดาวน์โหลดวิดีโอ MP4</button></a>
+</section>
+
+<p class="note">หมายเหตุ: TikTok อาจเข้ารหัสวิดีโอใหม่หลังอัปโหลด เว็บนี้ช่วยเตรียมไฟล์ให้เหมาะสม แต่ไม่สามารถรับประกันผลลัพธ์หลังแพลตฟอร์มประมวลผลได้ การบีบอัดเกิดขึ้นบนอุปกรณ์ของคุณ</p>
+<p class="muted">การเปิดใช้งานครั้งแรกต้องใช้อินเทอร์เน็ตเพื่อโหลด FFmpeg และอาจใช้เวลาหลายนาที แนะนำ Chrome และอุปกรณ์ที่มีพื้นที่ว่างเพียงพอ</p>
+</main>
+
+<script type="module">
+const $=id=>document.getElementById(id);
+let file=null,ffmpeg=null,outUrl=null,originalUrl=null,busy=false;
 const fmt=n=>{const u=['B','KB','MB','GB'];let i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?2:0)+' '+u[i]};
-function say(t){$('status').textContent=t}function pct(n){$('prog').style.width=Math.max(0,Math.min(100,n))+'%'}
-$('file').addEventListener('change',e=>{file=e.target.files?.[0]||null;$('info').textContent=file?file.name+' · '+fmt(file.size):'';$('go').disabled=!file;say(file?'พร้อมบีบอัด':'เลือกวิดีโอเพื่อเริ่มต้น')});
-async function loadEngine(){if(ffmpeg?.loaded)return ffmpeg;say('กำลังโหลดเครื่องมือบีบอัด…');
-const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');
-const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js');ffmpeg=new FFmpeg();
-ffmpeg.on('progress',({progress})=>{pct(15+Math.max(0,Math.min(1,progress))*80);say('กำลังบีบอัดวิดีโอ…')});
-const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
-const coreURL=await toBlobURL(base+'/ffmpeg-core.js','text/javascript');const wasmURL=await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm');
-await ffmpeg.load({coreURL,wasmURL});return ffmpeg}
-$('go').addEventListener('click',async()=>{if(!file||busy)return;busy=true;$('go').disabled=true;$('result').style.display='none';pct(0);
-try{const engine=await loadEngine();say('กำลังอ่านไฟล์วิดีโอ…');pct(10);await engine.writeFile('input.mp4',new Uint8Array(await file.arrayBuffer()));
-const args=['-i','input.mp4','-map','0:v:0','-map','0:a:0?','-c:v','libx264','-preset','veryfast','-crf',$('crf').value,'-pix_fmt','yuv420p','-movflags','+faststart'];
-const r=$('res').value;if(r!=='keep')args.push('-vf',`scale=-2:'min(${r},ih)'`);const f=$('fps').value;if(f!=='keep')args.push('-r',f);
-args.push('-c:a','aac','-b:a',$('audio').value+'k','output.mp4');say('กำลังบีบอัด… อย่าปิดหน้านี้');await engine.exec(args);
-const data=await engine.readFile('output.mp4');const blob=new Blob([data],{type:'video/mp4'});if(outUrl)URL.revokeObjectURL(outUrl);outUrl=URL.createObjectURL(blob);
-$('download').href=outUrl;$('download').download='TON_VIDEO_PRO.mp4';$('sizes').textContent='ก่อน: '+fmt(file.size)+' · หลัง: '+fmt(blob.size)+' · '+(blob.size<file.size?'ลดลง '+((1-blob.size/file.size)*100).toFixed(1)+'%':'ไฟล์ใหญ่ขึ้น');$('result').style.display='block';pct(100);say('เสร็จแล้ว ดาวน์โหลดไฟล์ได้เลย');
-await engine.deleteFile('input.mp4');await engine.deleteFile('output.mp4');
-}catch(err){console.error(err);say('ทำงานไม่สำเร็จ: '+(err?.message||String(err))+' — ลองเปิดเว็บผ่าน HTTPS และใช้ Chrome เวอร์ชันล่าสุด')}
-finally{busy=false;$('go').disabled=!file}});
+function say(t){$('status').textContent=t}
+function pct(n){$('prog').style.width=Math.max(0,Math.min(100,n))+'%'}
+$('file').addEventListener('change',e=>{
+ file=e.target.files?.[0]||null;
+ $('info').textContent=file?file.name+' · '+fmt(file.size):'ยังไม่ได้เลือกวิดีโอ';
+ $('go').disabled=!file;say(file?'พร้อมบีบอัด':'เลือกวิดีโอเพื่อเริ่มต้น');
+ if(originalUrl)URL.revokeObjectURL(originalUrl);
+ originalUrl=file?URL.createObjectURL(file):null;
+ $('beforeVideo').src=originalUrl||'';
+ $('beforeName').textContent=file?file.name:'';
+ $('result').style.display='none';
+});
+async function loadEngine(){
+ if(ffmpeg?.loaded)return ffmpeg;
+ say('กำลังโหลดเครื่องมือบีบอัด…');
+ const [{FFmpeg},{toBlobURL}]=await Promise.all([
+  import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js'),
+  import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js')
+ ]);
+ ffmpeg=new FFmpeg();
+ ffmpeg.on('progress',({progress})=>{pct(12+Math.max(0,Math.min(1,progress))*83);say('กำลังบีบอัดวิดีโอ…')});
+ const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';
+ const coreURL=await toBlobURL(base+'/ffmpeg-core.js','text/javascript');
+ const wasmURL=await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm');
+ const classWorkerURL=new URL('./ffmpeg/worker.js',document.baseURI).href;
+ await ffmpeg.load({coreURL,wasmURL,classWorkerURL});
+ return ffmpeg;
+}
+$('go').addEventListener('click',async()=>{
+ if(!file||busy)return;
+ busy=true;$('go').disabled=true;$('result').style.display='none';pct(0);
+ try{
+  const engine=await loadEngine();
+  say('กำลังอ่านไฟล์วิดีโอ…');pct(8);
+  const ext=(file.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'')||'mp4';
+  const inputName='input.'+ext;
+  await engine.writeFile(inputName,new Uint8Array(await file.arrayBuffer()));
+  const args=['-i',inputName,'-map','0:v:0','-map','0:a:0?','-c:v','libx264','-preset','veryfast','-crf',$('crf').value,'-pix_fmt','yuv420p','-movflags','+faststart'];
+  const r=$('res').value;if(r!=='keep')args.push('-vf',`scale=-2:'min(${r},ih)'`);
+  const f=$('fps').value;if(f!=='keep')args.push('-r',f);
+  args.push('-c:a','aac','-b:a',$('audio').value+'k','-c:s','copy','output.mp4');
+  say('กำลังบีบอัด… อย่าปิดหน้านี้');
+  const code=await engine.exec(args);
+  if(code!==0)throw new Error('FFmpeg ไม่สามารถแปลงไฟล์นี้ได้ (code '+code+')');
+  const data=await engine.readFile('output.mp4');
+  const blob=new Blob([data],{type:'video/mp4'});
+  if(outUrl)URL.revokeObjectURL(outUrl);
+  outUrl=URL.createObjectURL(blob);
+  $('afterVideo').src=outUrl;$('afterName').textContent='TON_VIDEO_PRO.mp4';
+  $('download').href=outUrl;$('download').download='TON_VIDEO_PRO.mp4';
+  $('beforeSize').textContent=fmt(file.size);$('afterSize').textContent=fmt(blob.size);
+  const diff=file.size-blob.size;
+  $('saved').textContent=diff>=0?fmt(diff)+' ('+(diff/file.size*100).toFixed(1)+'%)':'เพิ่ม '+fmt(-diff);
+  $('result').style.display='block';pct(100);
+  say('เสร็จแล้ว! เลื่อนลงเพื่อเปรียบเทียบก่อนและหลังบีบอัด');
+  try{await engine.deleteFile(inputName);await engine.deleteFile('output.mp4')}catch(_){}
+ }catch(err){
+  console.error(err);
+  say('ทำงานไม่สำเร็จ: '+(err?.message||String(err)));
+ }finally{busy=false;$('go').disabled=!file}
+});
+window.addEventListener('beforeunload',()=>{if(outUrl)URL.revokeObjectURL(outUrl);if(originalUrl)URL.revokeObjectURL(originalUrl)});
 </script></body></html>
