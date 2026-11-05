@@ -74,7 +74,7 @@ async function loadFFmpeg(){
  try{coreURL=await toBlobURL(core+'/ffmpeg-core.js','text/javascript');wasmURL=await toBlobURL(core+'/ffmpeg-core.wasm','application/wasm')}
  catch(e){throw new Error('ดาวน์โหลด FFmpeg Core/WASM ไม่สำเร็จ: '+(e?.message||e))}
  say('ขั้นตอน 3/4: กำลังเริ่ม Worker และ FFmpeg…');
- try{await ffmpeg.load({coreURL,wasmURL})}
+ try{const classWorkerURL=new URL('./ffmpeg/worker.js',window.location.href).href;\n try{await ffmpeg.load({coreURL,wasmURL,classWorkerURL})}}
  catch(e){ffmpeg=null;throw new Error('เริ่ม FFmpeg Worker ไม่สำเร็จ: '+(e?.message||e))}
  say('ขั้นตอน 4/4: โหลด FFmpeg สำเร็จ');return ffmpeg;
 }
