@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="th"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V2.3.3</title>
+<meta name="theme-color" content="#0b1220"><title>TON VIDEO PRO V3.0</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#0b1220;color:#eef5ff;font:16px/1.55 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:18px 14px 48px}
 .card{background:#142239;border:1px solid #30435e;border-radius:17px;padding:17px;margin:14px 0}
@@ -15,7 +15,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
 </style></head><body><main>
 <h1>🎬 TON VIDEO PRO</h1>
-<p class="muted">V2.3.3 · Android Diagnostics · HDR Safe · 60 / 120 FPS · Local processing</p>
+<p class="muted">V3.0 · HDR Capability Check · HDR Safe · 60 / 120 FPS · Local processing</p>
 
 <section class="card"><h2>1. เลือกวิดีโอ</h2>
 <label class="drop">⬆️<br><b>แตะเพื่อเลือกไฟล์วิดีโอ</b><br><span class="muted">MP4 / MOV / WebM · ประมวลผลบนอุปกรณ์</span><input id="file" type="file" accept="video/*"></label>
@@ -26,7 +26,7 @@ a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;
 <p class="muted">เวอร์ชันนี้จะแสดงแต่ละขั้นตอนการโหลดเครื่องมือและวิเคราะห์ เพื่อหาว่าหากล้มเหลวเกิดจาก CDN, Worker, FFmpeg หรือไฟล์วิดีโอ</p>
 <button id="analyze" disabled>วิเคราะห์วิดีโอ</button>
 <div class="bar"><i id="prog"></i></div><div id="status" class="status">เลือกไฟล์เพื่อเริ่มต้น</div>
-<div id="analysis" class="hidden"><table id="meta"></table><div id="hdr"></div></div>
+<div id="analysis" class="hidden"><table id="meta"></table><div id="hdr"></div><div id="encoderCheck"></div></div>
 </section>
 
 <section class="card"><h2>3. เลือกโหมดส่งออก</h2>
@@ -37,19 +37,20 @@ a{color:inherit;text-decoration:none}.hidden{display:none}.small{font-size:12px;
 <label>คุณภาพ SDR<select id="crf"><option value="18">สูงมาก · CRF 18</option><option value="20" selected>สมดุล · CRF 20</option><option value="22">ไฟล์เล็กลง · CRF 22</option><option value="24">บีบอัดมาก · CRF 24</option></select></label>
 </div>
 <div class="warn">HDR Safe จะส่งออกไฟล์ต้นฉบับเดิมเมื่อพบ HDR หรืออ่านข้อมูลไม่ครบ จึงไม่ลดขนาดไฟล์และไม่เปลี่ยน FPS ส่วน SDR Optimizer ใช้ H.264 8-bit เท่านั้น ห้ามใช้กับ HDR</div>
+<div class="good">V3.0 เพิ่มการตรวจสอบว่า FFmpeg Core มีตัวเข้ารหัส HEVC x265 หรือไม่ ก่อนเปิดใช้การบีบอัด HDR จริง ระบบจะไม่เข้ารหัส HDR จนกว่าจะยืนยันการรักษา HDR metadata ได้</div>
 <button id="process" disabled>เริ่มประมวลผล</button><div id="processStatus" class="status"></div>
 </section>
 
 <section id="result" class="card hidden"><h2>4. ผลลัพธ์</h2><div id="report"></div><a id="download"><button>ดาวน์โหลดไฟล์</button></a></section>
 
 <section class="card"><h2>ข้อจำกัดที่ต้องทราบ</h2>
-<p class="small">เวอร์ชันนี้ยังไม่มี HEVC x265 Main10 encoder สำหรับบีบอัด HDR โดยตรง การรักษา HDR ในโหมด Safe คือการคัดลอกไฟล์เดิมโดยไม่เข้ารหัสซ้ำ การแปลง 60 เป็น 120 FPS เป็นการเพิ่ม/ทำซ้ำเฟรมตามการตั้งค่า ไม่ใช่ AI Frame Interpolation และ TikTok ยังสามารถเข้ารหัสไฟล์ใหม่ได้</p>
+<p class="small">V3.0 ตรวจสอบการมีอยู่ของ libx265 ก่อน แต่การพบ encoder เพียงอย่างเดียวยังไม่รับประกันการรักษา HDR10/HLG หรือ dynamic metadata จึงยังไม่เปิด HDR re-encode จนกว่าจะมีการทดสอบ end-to-end กับไฟล์ตัวอย่าง การรักษา HDR Safe คือคัดลอกไฟล์เดิมโดยไม่เข้ารหัสซ้ำ การแปลง 60 เป็น 120 FPS ไม่ใช่ AI Frame Interpolation และ TikTok ยังสามารถเข้ารหัสไฟล์ใหม่ได้</p>
 <p class="small">ใช้ผ่าน HTTPS และ Chrome/Edge รุ่นใหม่ การวิเคราะห์ต้องโหลด FFmpeg.wasm จาก CDN ในครั้งแรก หากเครือข่ายบล็อก CDN จะแสดงขั้นตอนที่ล้มเหลว</p>
 </section>
 </main>
 <script type="module">
 const $=id=>document.getElementById(id);
-let file=null,ffmpeg=null,analysis=null,busy=false,outputURL=null;
+let file=null,ffmpeg=null,analysis=null,busy=false,outputURL=null,hdrEncoderAvailable=false;
 const fmt=n=>{if(!Number.isFinite(n))return 'ไม่ทราบ';let u=['B','KB','MB','GB'],i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?2:0)+' '+u[i]};
 const say=t=>$('status').textContent=t;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -99,9 +100,15 @@ $('analyze').onclick=async()=>{
   // Decode to null to obtain stream details; does not create an output file.
   await f.exec(['-hide_banner','-i','input_video','-map','0:v:0','-frames:v','1','-f','null','-']);
   analysis=parse(window.__tonProbeLogs||[]);
+  say('กำลังตรวจสอบตัวเข้ารหัส HEVC x265…');
+  window.__tonProbeLogs=[];
+  await f.exec(['-hide_banner','-encoders']);
+  const encoderText=(window.__tonProbeLogs||[]).join('\\n');
+  hdrEncoderAvailable=/\\blibx265\\b/i.test(encoderText);
   const rows=[['ชื่อไฟล์',file.name],['ขนาด',fmt(file.size)],['Codec',analysis.codec||'ไม่พบ'],['ความละเอียด',analysis.width?analysis.width+' × '+analysis.height:'ไม่พบ'],['FPS',analysis.fps||'ไม่พบ'],['Pixel Format',analysis.pix||'ไม่พบ'],['Bit Depth',analysis.ten?'พบสัญญาณ 10-bit':'ยังยืนยัน 10-bit ไม่ได้']];
   $('meta').innerHTML=rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('');
   $('hdr').innerHTML=analysis.hdr?'<div class="good">พบสัญญาณ HDR จาก metadata/log — เลือก HDR Safe</div>':analysis.sdr?'<div class="good">พบ BT.709 และไม่พบสัญญาณ HDR — มีแนวโน้มเป็น SDR</div>':'<div class="warn">ข้อมูลสีไม่เพียงพอที่จะยืนยัน HDR/SDR — HDR Safe จะเก็บไฟล์ต้นฉบับไว้</div>';
+  $('encoderCheck').innerHTML=hdrEncoderAvailable?'<div class="good">พบตัวเข้ารหัส libx265 ใน FFmpeg Core แต่ยังต้องทดสอบการรักษา HDR metadata ก่อนเปิดใช้งาน HDR compression</div>':'<div class="warn">ยังไม่พบตัวเข้ารหัส libx265 ใน FFmpeg Core นี้ จึงยังบีบอัด HDR HEVC 10-bit โดยตรงไม่ได้ ระบบจะคง HDR Safe ไว้เพื่อป้องกันความเสียหาย</div>';
   $('analysis').classList.remove('hidden');say('วิเคราะห์เสร็จแล้ว');setProgress(100);
  }catch(e){console.error(e);analysis={uncertain:true};$('analysis').classList.remove('hidden');$('meta').innerHTML='<tr><td>ผลวิเคราะห์</td><td>ไม่สำเร็จ</td></tr>'; $('hdr').innerHTML='<div class="warn">ระบบอ่านข้อมูลไม่สำเร็จ เพื่อความปลอดภัยให้ใช้ HDR Safe ซึ่งจะเก็บต้นฉบับโดยไม่เข้ารหัส</div>';say('เกิดข้อผิดพลาดจริง:\\n'+(e?.message||String(e))+'\\n\\nถ่ายภาพหน้าจอข้อความนี้ส่งให้ผู้พัฒนาได้เลย');}
  finally{busy=false;$('analyze').disabled=!file;$('process').disabled=!file}
