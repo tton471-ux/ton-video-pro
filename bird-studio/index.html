@@ -3,7 +3,7 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#071b14;color:#e8fff2;font:16px/1.55 system-ui,sans-serif}main{max-width:760px;margin:auto;padding:20px 14px 50px}h1{font-size:25px;margin:0}.sub{color:#a8c8b5;font-size:13px}.card{background:#10291f;border:1px solid #28513d;border-radius:18px;padding:17px;margin:14px 0}.pick{display:block;border:2px dashed #4c8767;padding:20px;border-radius:12px;text-align:center;margin-top:8px}.pick input{display:block;width:100%;margin-top:12px}button,select{width:100%;padding:14px;border:0;border-radius:12px;margin-top:10px;font:inherit}button{background:#8ee9ad;color:#052012;font-weight:800}button:disabled{opacity:.45}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.status{background:#06140f;padding:12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:12px}.bar{height:9px;background:#244232;border-radius:20px;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#8ee9ad}.warn{background:#352b18;color:#ffe1a1;padding:12px;border-radius:10px;font-size:14px}small{color:#a8c8b5}@media(max-width:520px){.row{grid-template-columns:1fr}}
 </style></head><body><main>
-<h1>🐦 TON BIRD SOUND STUDIO</h1><div class="sub">ONE CLICK VIDEO MAKER · LOCAL PROCESSING · v1.1 ANDROID IMAGE FIX</div>
+<h1>🐦 TON BIRD SOUND STUDIO</h1><div class="sub">ONE CLICK VIDEO MAKER · LOCAL PROCESSING · v1.2 ANDROID AUDIO FIX</div>
 <section class="card"><h2>1. เลือกรูปนก</h2><label class="pick">เลือกรูปภาพประกอบ (JPG / PNG / WebP)<input id="image" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"></label><small id="imageInfo">ยังไม่ได้เลือกรูป</small></section>
 <section class="card"><h2>2. เลือกเสียงนกจริง</h2><label class="pick">เลือกไฟล์เสียง<input id="audio" type="file" accept="audio/*,.ogg,.oga,.ogx,.opus,.flac"></label><small id="audioInfo">ยังไม่ได้เลือกเสียง</small><audio id="preview" controls style="width:100%;display:none;margin-top:10px" preload="none"></audio></section>
 <section class="card"><h2>3. ตั้งค่าวิดีโอ</h2><div class="row"><label>ความยาว<select id="duration"><option value="60">1 นาที (ทดสอบ)</option><option value="600">10 นาที</option><option value="1800">30 นาที</option><option value="3600" selected>1 ชั่วโมง</option></select></label><label>ความละเอียด<select id="resolution"><option value="854:480">480p · แนะนำ Android</option><option value="1280:720">720p</option><option value="1920:1080">1080p</option></select></label></div><p class="warn">แนะนำทดสอบ 1 นาที / 480p ก่อน การสร้างวิดีโอ 1 ชั่วโมงบน Android อาจใช้หน่วยความจำและแบตเตอรี่มาก</p><label><input id="rights" type="checkbox"> ฉันมีสิทธิ์ใช้รูปและเสียงนี้ รวมถึงการเผยแพร่ตามใบอนุญาต</label><button id="create" disabled>สร้างวิดีโอ MP4</button><div class="bar"><i id="progress"></i></div><div id="status" class="status">เลือกภาพและเสียงเพื่อเริ่มต้น</div><a id="download" style="display:none;color:#9af0b6;font-weight:700" download="TON_BIRD_SOUND.mp4">ดาวน์โหลดวิดีโอ MP4</a></section>
@@ -28,7 +28,29 @@ $('image').onchange=e=>{
  say('เลือกรูปสำเร็จ: '+chosen.name);
  ready();
 };
-$('audio').onchange=e=>{aud=e.target.files?.[0]||null;$('audioInfo').textContent=aud?aud.name+' · '+(aud.size/1048576).toFixed(1)+' MB':'ยังไม่ได้เลือกเสียง';const p=$('preview');p.pause();p.removeAttribute('src');p.load();p.style.display='none';if(aud){try{p.src=URL.createObjectURL(aud);p.style.display='block'}catch(_){}}ready()};
+$('audio').onchange=e=>{
+ const chosen=e.target.files?.[0]||null;
+ aud=null;
+ const p=$('preview');
+ // Avoid automatic decoding/playback of large audio files on Android.
+ // Some mobile browsers terminate the tab while creating an audio preview.
+ try { p.pause(); p.removeAttribute('src'); p.load(); } catch(_){}
+ p.style.display='none';
+ if(!chosen){
+   $('audioInfo').textContent='ยังไม่ได้เลือกเสียง';
+   ready();return;
+ }
+ const allowedExt=['mp3','wav','m4a','aac','ogg','oga','ogx','opus','flac','webm'];
+ const ext=(chosen.name.split('.').pop()||'').toLowerCase();
+ if(chosen.type && !chosen.type.startsWith('audio/') && !allowedExt.includes(ext)){
+   $('audioInfo').textContent='ไฟล์นี้ไม่รองรับ กรุณาเลือก MP3, WAV, M4A หรือ OGG';
+   e.target.value='';ready();return;
+ }
+ aud=chosen;
+ $('audioInfo').textContent=chosen.name+' · '+(chosen.size/1048576).toFixed(1)+' MB · เลือกแล้ว (ปิดตัวอย่างเสียงอัตโนมัติเพื่อป้องกัน Android เด้ง)';
+ say('เลือกไฟล์เสียงสำเร็จ: '+chosen.name);
+ ready();
+};
 $('rights').onchange=ready;
 async function engine(){if(ff)return ff;if(location.protocol!=='https:')throw Error('กรุณาเปิดผ่าน GitHub Pages HTTPS ไม่ใช่ไฟล์ index.html ใน Downloads');say('กำลังโหลด FFmpeg engine...');const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js');ff=new FFmpeg();ff.on('log',({message})=>{if(/error/i.test(message))say(message)});ff.on('progress',({progress:p})=>progress(p*100));const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';const classWorkerURL=new URL('../ffmpeg/worker.js',document.baseURI).href;await ff.load({classWorkerURL,coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm')});return ff}
 $('create').onclick=async()=>{if(!img||!aud||busy)return;busy=true;ready();$('download').style.display='none';progress(0);try{const f=await engine();say('กำลังเตรียมไฟล์...');const ext=(aud.name.split('.').pop()||'mp3').toLowerCase().replace(/[^a-z0-9]/g,'');const imageExt=(img.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');// Decode and downscale the still image before sending it to FFmpeg to reduce Android memory pressure.
