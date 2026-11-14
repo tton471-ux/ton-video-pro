@@ -85,7 +85,7 @@ $('create').onclick=async()=>{if(!imgs.length||!aud||busy)return;busy=true;ready
    args.push('-loop','1','-framerate','15','-t',String(segment),'-i','bird_image_'+i+'.jpg');
    const motion=$('motionMode').value;
    const visualFilter=motion==='motion'
-     ? '['+i+':v]scale='+w+':'+h+':force_original_aspect_ratio=increase,crop='+w+':'+h+',zoompan=z=\\'min(zoom+0.00025,1.05)\\':d=1:s='+w+'x'+h+':fps=15,format=yuv420p,setpts=PTS-STARTPTS[v'+i+']'
+     ? '['+i+':v]scale='+w+':'+h+':force_original_aspect_ratio=increase,crop='+w+':'+h+',zoompan=z=\'min(zoom+0.00025,1.05)\':d=1:s='+w+'x'+h+':fps=15,format=yuv420p,setpts=PTS-STARTPTS[v'+i+']'
      : '['+i+':v]scale='+w+':'+h+':force_original_aspect_ratio=increase,crop='+w+':'+h+',fps=15,format=yuv420p,setpts=PTS-STARTPTS[v'+i+']';
    filters.push(visualFilter);
  }
