@@ -53,7 +53,7 @@ $('audio').onchange=e=>{
  ready();
 };
 $('rights').onchange=ready;
-async function engine(){if(ff)return ff;if(location.protocol!=='https:')throw Error('กรุณาเปิดผ่าน GitHub Pages HTTPS ไม่ใช่ไฟล์ index.html ใน Downloads');say('กำลังโหลด FFmpeg engine... หากอินเทอร์เน็ตช้าอาจใช้เวลาสักครู่');const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js');ff=new FFmpeg();ff.on('log',({message})=>{if(/error/i.test(message))say(message)});ff.on('progress',({progress:p})=>progress(p*100));const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';const classWorkerURL=new URL('../ffmpeg/worker.js',document.baseURI).href;await ff.load({classWorkerURL,coreURL:base+'/ffmpeg-core.js',wasmURL:base+'/ffmpeg-core.wasm'});return ff}
+async function engine(){if(ff)return ff;if(location.protocol!=='https:')throw Error('กรุณาเปิดผ่าน GitHub Pages HTTPS ไม่ใช่ไฟล์ index.html ใน Downloads');say('กำลังโหลด FFmpeg engine... หากอินเทอร์เน็ตช้าอาจใช้เวลาสักครู่');const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js');ff=new FFmpeg();ff.on('log',({message})=>{if(/error/i.test(message))say(message)});ff.on('progress',({progress:p})=>progress(10+Math.max(0,Math.min(1,p))*85));const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';const classWorkerURL=new URL('../ffmpeg/worker.js',document.baseURI).href;await ff.load({classWorkerURL,coreURL:base+'/ffmpeg-core.js',wasmURL:base+'/ffmpeg-core.wasm'});return ff}
 $('create').onclick=async()=>{if(!imgs.length||!aud||busy)return;busy=true;ready();$('download').style.display='none';progress(0);try{
  say('ขั้นตอน 1/4: กำลังโหลด FFmpeg engine...');
  const f=await engine();
@@ -85,7 +85,6 @@ $('create').onclick=async()=>{if(!imgs.length||!aud||busy)return;busy=true;ready
  filters.push(imgs.map((_,i)=>'[v'+i+']').join('')+'concat=n='+imgs.length+':v=1:a=0[vout]');
  args.push('-filter_complex',filters.join(';'),'-map','[vout]','-map',String(imgs.length)+':a:0','-t',String(dur),'-c:v','libx264','-preset','ultrafast','-tune','stillimage','-crf','25','-r','24','-c:a','aac','-b:a','128k','-ar','44100','-ac','2','-shortest','-movflags','+faststart','ton_bird_sound.mp4');
  say('ขั้นตอน 4/4: กำลังเรนเดอร์วิดีโอ '+dur+' วินาที · '+imgs.length+' รูป · '+w+'×'+h+' px · รอจนถึง 100%');
- f.on('progress',({progress:p})=>{if(Number.isFinite(p))progress(10+Math.max(0,Math.min(1,p))*85)});
  await f.exec(args);
  progress(96);say('เรนเดอร์เสร็จแล้ว กำลังรวมไฟล์ MP4 และเตรียมดาวน์โหลด...');
  const data=await f.readFile('ton_bird_sound.mp4');const blob=new Blob([data],{type:'video/mp4'});
