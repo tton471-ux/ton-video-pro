@@ -3,8 +3,8 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#071b14;color:#e8fff2;font:16px/1.55 system-ui,sans-serif}main{max-width:760px;margin:auto;padding:20px 14px 50px}h1{font-size:25px;margin:0}.sub{color:#a8c8b5;font-size:13px}.card{background:#10291f;border:1px solid #28513d;border-radius:18px;padding:17px;margin:14px 0}.pick{display:block;border:2px dashed #4c8767;padding:20px;border-radius:12px;text-align:center;margin-top:8px}.pick input{display:block;width:100%;margin-top:12px}button,select{width:100%;padding:14px;border:0;border-radius:12px;margin-top:10px;font:inherit}button{background:#8ee9ad;color:#052012;font-weight:800}button:disabled{opacity:.45}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.status{background:#06140f;padding:12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:12px}.bar{height:9px;background:#244232;border-radius:20px;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#8ee9ad}.warn{background:#352b18;color:#ffe1a1;padding:12px;border-radius:10px;font-size:14px}small{color:#a8c8b5}@media(max-width:520px){.row{grid-template-columns:1fr}}
 </style></head><body><main>
-<h1>🐦 TON BIRD SOUND STUDIO</h1><div class="sub">ONE CLICK VIDEO MAKER · LOCAL PROCESSING · v1.0</div>
-<section class="card"><h2>1. เลือกรูปนก</h2><label class="pick">เลือกรูปภาพประกอบ<input id="image" type="file" accept="image/*"></label><small id="imageInfo">ยังไม่ได้เลือกรูป</small></section>
+<h1>🐦 TON BIRD SOUND STUDIO</h1><div class="sub">ONE CLICK VIDEO MAKER · LOCAL PROCESSING · v1.1 ANDROID IMAGE FIX</div>
+<section class="card"><h2>1. เลือกรูปนก</h2><label class="pick">เลือกรูปภาพประกอบ (JPG / PNG / WebP)<input id="image" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"></label><small id="imageInfo">ยังไม่ได้เลือกรูป</small></section>
 <section class="card"><h2>2. เลือกเสียงนกจริง</h2><label class="pick">เลือกไฟล์เสียง<input id="audio" type="file" accept="audio/*,.ogg,.oga,.ogx,.opus,.flac"></label><small id="audioInfo">ยังไม่ได้เลือกเสียง</small><audio id="preview" controls style="width:100%;display:none;margin-top:10px" preload="none"></audio></section>
 <section class="card"><h2>3. ตั้งค่าวิดีโอ</h2><div class="row"><label>ความยาว<select id="duration"><option value="60">1 นาที (ทดสอบ)</option><option value="600">10 นาที</option><option value="1800">30 นาที</option><option value="3600" selected>1 ชั่วโมง</option></select></label><label>ความละเอียด<select id="resolution"><option value="854:480">480p · แนะนำ Android</option><option value="1280:720">720p</option><option value="1920:1080">1080p</option></select></label></div><p class="warn">แนะนำทดสอบ 1 นาที / 480p ก่อน การสร้างวิดีโอ 1 ชั่วโมงบน Android อาจใช้หน่วยความจำและแบตเตอรี่มาก</p><label><input id="rights" type="checkbox"> ฉันมีสิทธิ์ใช้รูปและเสียงนี้ รวมถึงการเผยแพร่ตามใบอนุญาต</label><button id="create" disabled>สร้างวิดีโอ MP4</button><div class="bar"><i id="progress"></i></div><div id="status" class="status">เลือกภาพและเสียงเพื่อเริ่มต้น</div><a id="download" style="display:none;color:#9af0b6;font-weight:700" download="TON_BIRD_SOUND.mp4">ดาวน์โหลดวิดีโอ MP4</a></section>
 <p class="sub">ไฟล์ภาพและเสียงถูกประมวลผลในเบราว์เซอร์ ไม่ส่งขึ้นเซิร์ฟเวอร์ของ TON BIRD SOUND เว็บไซต์ต้องใช้อินเทอร์เน็ตเพื่อโหลด FFmpeg engine</p>
@@ -13,9 +13,37 @@
 const $=id=>document.getElementById(id);let img=null,aud=null,ff=null,outUrl=null,busy=false;
 const say=t=>$('status').textContent=t;const progress=n=>$('progress').style.width=Math.max(0,Math.min(100,n))+'%';
 function ready(){$('create').disabled=!(img&&aud&&$('rights').checked)||busy}
-$('image').onchange=e=>{img=e.target.files?.[0]||null;$('imageInfo').textContent=img?img.name+' · '+(img.size/1048576).toFixed(1)+' MB':'ยังไม่ได้เลือกรูป';ready()};
+$('image').onchange=e=>{
+ const chosen=e.target.files?.[0]||null;
+ img=null;
+ if(!chosen){$('imageInfo').textContent='ยังไม่ได้เลือกรูป';ready();return}
+ const allowed=['image/jpeg','image/png','image/webp'];
+ if(!allowed.includes(chosen.type)){
+   $('imageInfo').textContent='ไฟล์นี้ไม่รองรับ กรุณาเลือกรูป JPG, PNG หรือ WebP';
+   e.target.value='';ready();return;
+ }
+ img=chosen;
+ const mb=(chosen.size/1048576).toFixed(1);
+ $('imageInfo').textContent=chosen.name+' · '+mb+' MB'+(chosen.size>15*1048576?' · ไฟล์ใหญ่ ระบบจะย่อก่อนประมวลผล':' · เลือกแล้ว');
+ say('เลือกรูปสำเร็จ: '+chosen.name);
+ ready();
+};
 $('audio').onchange=e=>{aud=e.target.files?.[0]||null;$('audioInfo').textContent=aud?aud.name+' · '+(aud.size/1048576).toFixed(1)+' MB':'ยังไม่ได้เลือกเสียง';const p=$('preview');p.pause();p.removeAttribute('src');p.load();p.style.display='none';if(aud){try{p.src=URL.createObjectURL(aud);p.style.display='block'}catch(_){}}ready()};
 $('rights').onchange=ready;
 async function engine(){if(ff)return ff;if(location.protocol!=='https:')throw Error('กรุณาเปิดผ่าน GitHub Pages HTTPS ไม่ใช่ไฟล์ index.html ใน Downloads');say('กำลังโหลด FFmpeg engine...');const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js');ff=new FFmpeg();ff.on('log',({message})=>{if(/error/i.test(message))say(message)});ff.on('progress',({progress:p})=>progress(p*100));const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';const classWorkerURL=new URL('../ffmpeg/worker.js',document.baseURI).href;await ff.load({classWorkerURL,coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm')});return ff}
-$('create').onclick=async()=>{if(!img||!aud||busy)return;busy=true;ready();$('download').style.display='none';progress(0);try{const f=await engine();say('กำลังเตรียมไฟล์...');const ext=(aud.name.split('.').pop()||'mp3').toLowerCase().replace(/[^a-z0-9]/g,'');const imageExt=(img.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');await f.writeFile('bird_image.'+imageExt,new Uint8Array(await img.arrayBuffer()));await f.writeFile('bird_audio.'+ext,new Uint8Array(await aud.arrayBuffer()));const [w,h]=$('resolution').value.split(':');const dur=Number($('duration').value);say('กำลังสร้างวิดีโอ '+dur+' วินาที... กรุณาอย่าปิดหน้าเว็บ');const vf='scale='+w+':'+h+':force_original_aspect_ratio=increase,crop='+w+':'+h+',zoompan=z=\'min(zoom+0.00035,1.06)\':d=1:s='+w+'x'+h+':fps=24,format=yuv420p';await f.exec(['-loop','1','-framerate','24','-i','bird_image.'+imageExt,'-stream_loop','-1','-i','bird_audio.'+ext,'-t',String(dur),'-vf',vf,'-c:v','libx264','-preset','ultrafast','-tune','stillimage','-crf','25','-r','24','-c:a','aac','-b:a','128k','-ar','44100','-ac','2','-shortest','-movflags','+faststart','ton_bird_sound.mp4']);say('กำลังเตรียมไฟล์ดาวน์โหลด...');const data=await f.readFile('ton_bird_sound.mp4');const blob=new Blob([data],{type:'video/mp4'});if(outUrl)URL.revokeObjectURL(outUrl);outUrl=URL.createObjectURL(blob);$('download').href=outUrl;$('download').download='TON_BIRD_SOUND_EP001_'+dur+'s.mp4';$('download').style.display='block';say('สร้างวิดีโอสำเร็จ · '+(blob.size/1048576).toFixed(1)+' MB · กดดาวน์โหลดวิดีโอ MP4');progress(100)}catch(e){console.error(e);say('สร้างวิดีโอไม่สำเร็จ: '+(e?.message||e)+'\nลองทดสอบ 1 นาที / 480p ก่อน');}finally{busy=false;ready()}};
+$('create').onclick=async()=>{if(!img||!aud||busy)return;busy=true;ready();$('download').style.display='none';progress(0);try{const f=await engine();say('กำลังเตรียมไฟล์...');const ext=(aud.name.split('.').pop()||'mp3').toLowerCase().replace(/[^a-z0-9]/g,'');const imageExt=(img.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');// Decode and downscale the still image before sending it to FFmpeg to reduce Android memory pressure.
+let bitmap=null;
+try {
+ bitmap=await createImageBitmap(img,{resizeWidth:1920,resizeQuality:'high'});
+ const targetW=1920,targetH=1080;
+ const canvas=document.createElement('canvas');canvas.width=targetW;canvas.height=targetH;
+ const ctx=canvas.getContext('2d',{alpha:false});
+ const scale=Math.max(targetW/bitmap.width,targetH/bitmap.height);
+ const sw=targetW/scale,sh=targetH/scale,sx=(bitmap.width-sw)/2,sy=(bitmap.height-sh)/2;
+ ctx.drawImage(bitmap,sx,sy,sw,sh,0,0,targetW,targetH);
+ const jpg=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.88));
+ if(!jpg)throw new Error('แปลงรูปไม่สำเร็จ กรุณาใช้ JPG หรือ PNG ขนาดเล็กกว่า');
+ await f.writeFile('bird_image.jpg',new Uint8Array(await jpg.arrayBuffer()));
+} finally { if(bitmap)bitmap.close(); }
+await f.writeFile('bird_audio.'+ext,new Uint8Array(await aud.arrayBuffer()));const [w,h]=$('resolution').value.split(':');const dur=Number($('duration').value);say('กำลังสร้างวิดีโอ '+dur+' วินาที... กรุณาอย่าปิดหน้าเว็บ');const vf='scale='+w+':'+h+':force_original_aspect_ratio=increase,crop='+w+':'+h+',zoompan=z=\'min(zoom+0.00035,1.06)\':d=1:s='+w+'x'+h+':fps=24,format=yuv420p';await f.exec(['-loop','1','-framerate','24','-i','bird_image.jpg,'-stream_loop','-1','-i','bird_audio.'+ext,'-t',String(dur),'-vf',vf,'-c:v','libx264','-preset','ultrafast','-tune','stillimage','-crf','25','-r','24','-c:a','aac','-b:a','128k','-ar','44100','-ac','2','-shortest','-movflags','+faststart','ton_bird_sound.mp4']);say('กำลังเตรียมไฟล์ดาวน์โหลด...');const data=await f.readFile('ton_bird_sound.mp4');const blob=new Blob([data],{type:'video/mp4'});if(outUrl)URL.revokeObjectURL(outUrl);outUrl=URL.createObjectURL(blob);$('download').href=outUrl;$('download').download='TON_BIRD_SOUND_EP001_'+dur+'s.mp4';$('download').style.display='block';say('สร้างวิดีโอสำเร็จ · '+(blob.size/1048576).toFixed(1)+' MB · กดดาวน์โหลดวิดีโอ MP4');progress(100)}catch(e){console.error(e);say('สร้างวิดีโอไม่สำเร็จ: '+(e?.message||e)+'\nลองทดสอบ 1 นาที / 480p ก่อน');}finally{busy=false;ready()}};
 </script></body></html>
