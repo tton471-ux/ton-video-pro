@@ -83,7 +83,7 @@ $('create').onclick=async()=>{if(!imgs.length||!aud||busy)return;busy=true;ready
      await f.writeFile('bird_image_'+i+'.jpg',new Uint8Array(await jpg.arrayBuffer()));
    }finally{if(bitmap)bitmap.close();}
    args.push('-loop','1','-framerate','15','-t',String(segment),'-i','bird_image_'+i+'.jpg');
-   filters.push('['+i+':v]scale='+w+':'+h+':force_original_aspect_ratio=increase,crop='+w+':'+h+',zoompan=z=\'min(zoom+0.00035,1.06)\':d=1:s='+w+'x'+h+':fps=24,format=yuv420p,setpts=PTS-STARTPTS[v'+i+']');
+   filters.push('['+i+':v]scale='+w+':'+h+':force_original_aspect_ratio=increase,crop='+w+':'+h+',fps=15,format=yuv420p,setpts=PTS-STARTPTS[v'+i+']');
  }
  say('ขั้นตอน 3/4: กำลังเตรียมเสียง และประกอบ '+imgs.length+' ฉาก...');
  await f.writeFile('bird_audio.'+ext,new Uint8Array(await aud.arrayBuffer()));
